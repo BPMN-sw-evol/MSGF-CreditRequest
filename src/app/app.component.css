@@ -1,0 +1,30 @@
+.toolbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  background-color: #1976d2;
+  color: white;
+  font-weight: 600;
+  padding: 0 2%;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  margin: 5% 2%;
+}
+
+.form-group {
+  margin: 1%;
+}
+
+.col {
+  display: flex;
+  justify-content: center;
+  margin: 2%;
+  gap: 2%;
+}
