@@ -1,28 +1,45 @@
 package com.msgfoundation.creditRequest.controller;
 
-import com.msgfoundation.creditRequest.dto.PersonDTO;
-import com.msgfoundation.creditRequest.service.IPersonService;
-import org.apache.coyote.Response;
+import com.msgfoundation.creditRequest.model.Person;
+import com.msgfoundation.creditRequest.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/person")
 public class PersonController {
+    private final PersonService personService;
+
     @Autowired
-    private IPersonService personService;
+    public PersonController(PersonService personService) {
+        this.personService = personService;
+    }
+
+    @GetMapping("/")
+    public List<Person> getAllPersons() {
+        return personService.getAllPersons();
+    }
+
+    @GetMapping("/{id}")
+    public Person getPersonById(@PathVariable String id) {
+        return personService.getPersonById(id);
+    }
 
     @PostMapping("/create")
-    public ResponseEntity<PersonDTO> createPerson(@RequestBody PersonDTO personDTO){
-        PersonDTO createdPerson = personService.save(personDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdPerson);
+    public Person createPerson(@RequestBody Person person) {
+        return personService.createPerson(person);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<PersonDTO> updatePerson(@PathVariable String id, @RequestBody PersonDTO personDTO){
-        PersonDTO updatedPerson = personService.updatePerson(id, personDTO);
-        return ResponseEntity.ok(personDTO);
+    public Person updatePerson(@PathVariable String id, @RequestBody Person person) {
+        return personService.updatePerson(id, person);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public void deletePerson(@PathVariable String id) {
+        personService.deletePerson(id);
     }
 }

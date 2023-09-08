@@ -14,8 +14,8 @@ public class Couple {
     private Long id;
     @OneToOne
     @JoinColumn(name = "partner1Id")
-    private Person partner1Name;
+    private Person partner1;
     @OneToOne
     @JoinColumn(name = "partner2Id")
-    private Person partner2Name;
+    private Person partner2;
 }
