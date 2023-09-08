@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col-md-10">
+        <div class="card mt-4">
+            <div class="card-body">
+                <div class="card-title">
+                    <h1 class="text-center">Ingresar los nombres completos de los solicitantes!</h1>
+                    <div class="form-group form-floating mb-3">
+                        <input type="text" [(ngModel)]="selectCouple.partner1name" class="form-control">
+                        <label for="floatingInput">Nombre del Señor</label>
+
+                    </div>  
+                    <div class="form-group form-floating mb-3">
+                        <input type="text" [(ngModel)]="selectCouple.partner2name" class="form-control">
+                        <label for="floatingInput">Nombre de la Señora</label>
+
+                    </div>
+                    <div class="col">
+                        <button (click)="AddOrUpdate()" class="btn btn-primary" [hidden]="isEditing">Continuar</button>
+                        <!-- <button (click)="AddOrUpdate()" class="btn btn-primary" [hidden]="!isEditing">Update</button>
+                        <button *ngIf="selectCouple.cod_couple !== 0 && isEditing" (click)="deleteCouple()"
+                            class="btn btn-danger">Delete</button> -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

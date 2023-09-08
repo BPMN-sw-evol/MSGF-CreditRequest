@@ -1,6 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+*{
+  padding: 0;
+  margin: 0;
+  font-size: 2vh;
+}
 body{
-    padding: 2%;
     background-color: rgb(232, 255, 255);
-    font-size: 2vh;
   }

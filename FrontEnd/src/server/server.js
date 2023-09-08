@@ -1,4 +1,4 @@
-const express = require('express');
+ const express = require('express');
 const app = express();
 const port = process.env.PORT || 3000;
 const bodyParser = require('body-parser');
@@ -18,7 +18,7 @@ const corsOptions = {
     origin: 'http://localhost:4200', // Cambia esto a tu origen de Angular
     optionsSuccessStatus: 200, // Algunas versiones de navegadores antiguos (IE) no devuelven 204
   };
-  
+
 app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
@@ -30,10 +30,10 @@ app.get('/allcouples', async (req, res) => {
       // Realiza una consulta SQL para obtener todos los registros de la tabla 'couple'
       const query = 'SELECT * FROM couple';
       const result = await pool.query(query);
-  
+
       // Extrae los registros de la respuesta de la base de datos
       const couples = result.rows;
-  
+
       // Envía los registros como respuesta en formato JSON
       res.json(couples);
     } catch (error) {
@@ -59,7 +59,7 @@ app.post('/registrar', (req, res) => {
         res.status(200).json({ message: 'Información insertada correctamente' });
       }
     }
-  ); 
+  );
 });
 
 // Ruta para actualizar una pareja existente
@@ -67,34 +67,34 @@ app.put('/actualizar/:cod_couple', async (req, res) => {
     try {
       const { cod_couple } = req.params;
       const updatedCoupleData = req.body;
-  
+
       // Actualiza la pareja en la base de datos
       const updateQuery = `
         UPDATE couple
         SET partner1name = $2, partner2name = $3
         WHERE cod_couple = $1
       `;
-      
+
       const { partner1name, partner2name } = updatedCoupleData;
       await pool.query(updateQuery, [cod_couple, partner1name, partner2name]);
-  
+
       res.status(200).json({ message: 'Pareja actualizada con éxito' });
     } catch (error) {
       console.error('Error al actualizar la pareja:', error);
       res.status(500).json({ error: 'Error al actualizar la pareja' });
     }
   });
-  
+
 
 // Ruta para eliminar un registro por su ID
 app.delete('/eliminar/:cod_couple', async (req, res) => {
     const { cod_couple } = req.params;
-  
+
     try {
       // Ejecuta la consulta DELETE en la base de datos
       const query = 'DELETE FROM couple WHERE cod_couple = $1';
       const result = await pool.query(query, [cod_couple]);
-  
+
       // Verifica si se eliminó algún registro
       if (result.rowCount === 1) {
         res.status(200).json({ message: 'Registro eliminado correctamente' });
