@@ -14,7 +14,7 @@ This repository integrates a Spring Boot application with a PostgreSQL database 
 
 [Spring initializr](https://start.spring.io/) is a tool that facilitates the creation of Spring Boot projects that integrate several dependencies as Spring Data JPA, Spring Web, Lombok, Thymeleaf, DevTools. Spring Boot is a development framework that simplifies the creation of Web applications in Java. 
 
-This module is used exclusively by the couple requesting a loan from MsgFoundation, the user is required to be authenticated in the [authentication with keycloak](https://github.com/BPMN-sw-evol/MSGF-IdentityService) service, where the authenticated person enters the personal data of both the couple and him/hers the characteristics of the loan requested.
+This module is used exclusively by the couple requesting a credit from MsgFoundation, the user is required to be authenticated in the [authentication with keycloak](https://github.com/BPMN-sw-evol/MSGF-IdentityService) service, where the authenticated person enters the personal data of both the couple and him/hers the characteristics of the loan requested.
 
 
 ## Prerequisites
