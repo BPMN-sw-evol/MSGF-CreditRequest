@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "PERSON")
@@ -23,7 +24,7 @@ public class Person {
     private String gender;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "birthDate")
-    private String birthDate;
+    private LocalDate birthDate;
     @Column(name = "phoneNumber")
     private String phoneNumber;
 }
