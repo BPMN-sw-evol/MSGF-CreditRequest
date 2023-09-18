@@ -31,7 +31,7 @@ public class CreditRequestController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<CreditRequest> createCreditRequest(@RequestBody CreditRequestDTO creditRequestDTO) {
+    public ResponseEntity<CreditRequest> createCreditRequest(@ModelAttribute CreditRequestDTO creditRequestDTO) {
         try {
             CreditRequest creditRequest = new CreditRequest();
             creditRequest.setMarriageYears(creditRequestDTO.getMarriageYears());
@@ -39,8 +39,8 @@ public class CreditRequestController {
             creditRequest.setHousePrices(creditRequestDTO.getHousePrices());
             creditRequest.setQuotaValue(creditRequestDTO.getQuotaValue());
             creditRequest.setCoupleSavings(creditRequestDTO.getCoupleSavings());
-            creditRequest.setFinancialViability(creditRequestDTO.getFinancialViability());
-            creditRequest.setIsValid(creditRequestDTO.getIsValid());
+            creditRequest.setFinancialViability(false);
+            creditRequest.setIsValid(false);
 
             Long coupleId = creditRequestDTO.getApplicantCouple(); // Obtener el ID de la pareja del DTO
             Couple applicantCouple = coupleService.getCoupleById(coupleId);

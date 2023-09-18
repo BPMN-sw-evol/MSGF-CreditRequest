@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head th:replace="layout/layout :: head">
+    <meta charset="UTF-8">
+    <title>Credit Form</title>
+</head>
+<body>
+
+<section class="nombreClass">
+    <div class="container-fluid" layout:fragment="page-content">
+        <form action="credit_request/create" method="post">
+
+            <div>
+                <label for="marriageYears">Years of Marriage:</label>
+                <input type="number" id="marriageYears" name="marriageYears" placeholder="Enter years of marriage" required>
+            </div>
+            <div>
+                <label for="bothEmployees">Both Employed:</label>
+                <input type="checkbox" id="bothEmployees" name="bothEmployees">
+            </div>
+            <div>
+                <label for="housePrices">House Prices:</label>
+                <input type="number" id="housePrices" name="housePrices" placeholder="Enter house prices">
+            </div>
+            <div>
+                <label for="quotaValue">Quota Value:</label>
+                <input type="number" id="quotaValue" name="quotaValue" placeholder="Enter quota value">
+            </div>
+            <div>
+                <label for="coupleSavings">Couple Savings:</label>
+                <input type="number" id="coupleSavings" name="coupleSavings" placeholder="Enter couple savings">
+            </div>
+            <div>
+                <label for="applicantCouple"> ID: </label>
+                <input id="applicantCouple" type="text" name="applicantCouple" placeholder="Enter your applicantCouple ID" required>
+            </div>
+
+            <button>Guardar</button>
+
+        </form>
+    </div>
+</section>
+
+<th:block layout:fragment="page-scripts">
+    <script>
+
+    </script>
+</th:block>
+
+</body>
+</html>
