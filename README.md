@@ -28,7 +28,9 @@ To use this program you need the following:
 
 3. **Java 17 or higher**: You can get help to download and install the java version by following [this link](https://www.youtube.com/watch?v=oAin-q1oTDw&pp=ygUXY29tbyBjb25maWd1cmFyIGphdmEgMTc%3D)
 
-4. **Maven 3.9**: You can get help to download and install the maven version by following [this link](https://www.youtube.com/watch?v=1QfiyR_PWxU&pp=ygUSaW5zdGFsYXIgbWF2ZW4gMy45)    
+4. **Maven 3.9**: You can get help to download and install the maven version by following [this link](https://www.youtube.com/watch?v=1QfiyR_PWxU&pp=ygUSaW5zdGFsYXIgbWF2ZW4gMy45)
+
+5. **PostgreSQL with PgAdmin**: you can download to install PostgreSQL and pgAdmin for the database manage [official website](https://www.postgresql.org/download/)
 
 ## Usage
 
@@ -44,6 +46,6 @@ To use the program you must do:
 
 3. The program works on port 8080. To access open the browser of your choice and type in the search box: 
    ```
-   http://localhost:8080/register
+   http://localhost:8080/
    ```
-5. Ready! You can request a new credit request!.
+5. Ready! You can request a new credit request in our forms!.
