@@ -48,4 +48,4 @@ To use the program you must do:
    ```
    http://localhost:8080/
    ```
-5. Ready! You can request a new credit request in our forms!.
+5. Ready! You can request a new credit in our forms!.
