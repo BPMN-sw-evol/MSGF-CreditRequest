@@ -1,7 +1,7 @@
-package com.example.CreditRequest.service;
+package com.MSGFoundation.service;
 
-import com.example.CreditRequest.model.CreditRequest;
-import com.example.CreditRequest.repository.ICreditRequestRepository;
+import com.MSGFoundation.model.CreditRequest;
+import com.MSGFoundation.repository.ICreditRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

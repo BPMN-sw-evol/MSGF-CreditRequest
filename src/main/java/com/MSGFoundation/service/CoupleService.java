@@ -1,7 +1,7 @@
-package com.example.CreditRequest.service;
+package com.MSGFoundation.service;
 
-import com.example.CreditRequest.model.Couple;
-import com.example.CreditRequest.repository.ICoupleRepository;
+import com.MSGFoundation.model.Couple;
+import com.MSGFoundation.repository.ICoupleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

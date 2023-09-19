@@ -1,7 +1,6 @@
-package com.example.CreditRequest.controller;
+package com.MSGFoundation.controller;
 
-import com.example.CreditRequest.model.CreditRequest;
-import com.example.CreditRequest.model.Person;
+import com.MSGFoundation.model.Person;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +16,7 @@ public class HomeController {
         return "inicio";
     }
 
-    @GetMapping({"/register-couple", "/views/coupleForm.html"})
+    @GetMapping("/register-couple")
     public String registerFormView(Model model){
         List<Person> people = new ArrayList<>();
         people.add(new Person());

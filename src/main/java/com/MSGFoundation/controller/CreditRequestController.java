@@ -1,10 +1,10 @@
-package com.example.CreditRequest.controller;
+package com.MSGFoundation.controller;
 
-import com.example.CreditRequest.dto.CreditRequestDTO;
-import com.example.CreditRequest.model.Couple;
-import com.example.CreditRequest.model.CreditRequest;
-import com.example.CreditRequest.service.CoupleService;
-import com.example.CreditRequest.service.CreditRequestService;
+import com.MSGFoundation.dto.CreditRequestDTO;
+import com.MSGFoundation.model.Couple;
+import com.MSGFoundation.model.CreditRequest;
+import com.MSGFoundation.service.CoupleService;
+import com.MSGFoundation.service.CreditRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

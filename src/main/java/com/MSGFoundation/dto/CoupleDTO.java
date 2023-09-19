@@ -1,4 +1,4 @@
-package com.example.CreditRequest.dto;
+package com.MSGFoundation.dto;
 
 import lombok.Data;
 

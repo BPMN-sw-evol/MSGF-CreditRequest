@@ -1,4 +1,4 @@
-package com.example.CreditRequest.mapper;
+package com.MSGFoundation.mapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

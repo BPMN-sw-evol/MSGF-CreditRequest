@@ -9794,6 +9794,7 @@ a:focus {
 
 #wrapper {
   display: flex;
+  height: 100vh !important;
 }
 
 #wrapper #content-wrapper {

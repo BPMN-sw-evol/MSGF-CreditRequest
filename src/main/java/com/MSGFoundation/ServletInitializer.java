@@ -1,4 +1,4 @@
-package com.example.CreditRequest;
+package com.MSGFoundation;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;

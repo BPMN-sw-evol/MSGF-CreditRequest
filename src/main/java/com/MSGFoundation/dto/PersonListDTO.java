@@ -1,6 +1,6 @@
-package com.example.CreditRequest.dto;
+package com.MSGFoundation.dto;
 
-import com.example.CreditRequest.model.Person;
+import com.MSGFoundation.model.Person;
 import lombok.Data;
 
 import java.util.List;

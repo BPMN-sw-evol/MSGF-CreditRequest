@@ -1,6 +1,6 @@
-package com.example.CreditRequest.repository;
+package com.MSGFoundation.repository;
 
-import com.example.CreditRequest.model.CreditRequest;
+import com.MSGFoundation.model.CreditRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

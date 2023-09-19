@@ -1,17 +1,17 @@
-package com.example.CreditRequest.controller;
+package com.MSGFoundation.controller;
 
-import com.example.CreditRequest.dto.CoupleDTO;
-import com.example.CreditRequest.dto.PersonListDTO;
-import com.example.CreditRequest.model.Person;
-import com.example.CreditRequest.service.PersonService;
+import com.MSGFoundation.dto.CoupleDTO;
+import com.MSGFoundation.dto.PersonListDTO;
+import com.MSGFoundation.model.Person;
+import com.MSGFoundation.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/person")
 public class PersonController {
     private final PersonService personService;
@@ -36,15 +36,32 @@ public class PersonController {
     @PostMapping("/create")
     public String createPerson(@ModelAttribute PersonListDTO personListDTO, RedirectAttributes redirect) {
         List<Person> people = personListDTO.getPeople();
-        for( Person person: people){
-            personService.createPerson(person);
+
+        // Validar que haya exactamente dos personas en la lista
+        if (people.size() != 2) {
+            redirect.addFlashAttribute("errorMsg", "Debe proporcionar exactamente dos personas.");
+            return "redirect:/register-couple"; // Redireccionar con mensaje de error
         }
+
+        // Validar cada persona antes de crearlas
+        for (Person person : people) {
+            if (person.getId().isEmpty()) {
+                redirect.addFlashAttribute("errorMsg", "Información de persona no válida.");
+                return "redirect:/register-couple"; // Redireccionar con mensaje de error
+            }
+        }
+
+        // Si todas las validaciones son exitosas, proceder con la creación de personas y pareja
+        personService.createPerson(people.get(0));
+        personService.createPerson(people.get(1));
+
         CoupleDTO couple = new CoupleDTO();
         couple.setPartner1Id(people.get(0).getId());
         couple.setPartner2Id(people.get(1).getId());
         coupleController.createCouple(couple);
-        redirect.addFlashAttribute("msgSuccessfully","The people has been added successfully");
-        return "redirect/";
+
+        redirect.addFlashAttribute("msgSuccessfully", "Las personas se han registrado exitosamente.");
+        return "redirect:/register-couple";
     }
 
     @PutMapping("/update/{id}")

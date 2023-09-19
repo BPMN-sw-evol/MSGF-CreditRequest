@@ -1,4 +1,4 @@
-package com.example.CreditRequest.model;
+package com.MSGFoundation.model;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
