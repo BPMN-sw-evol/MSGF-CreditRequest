@@ -18,7 +18,7 @@
                         <h1 class="text-center">Personal Information</h1>
                     </div>
                 </div>
-                <form action="person/create" method="post" onsubmit="return validateFormCouple(this);">
+                <form id="personForm" action="person/create" method="post">
 
                     <div class="card-body d-flex">
                         <div class="card col-md-6">
@@ -112,9 +112,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer d-flex justify-content-around">
-                        <button class="btn btn-primary" type="submit">Save</button>
-                    </div>
                 </form>
 
                 <div class="card-header">
@@ -122,7 +119,7 @@
                         <h1 class="text-center">Credit Information</h1>
                     </div>
                 </div>
-                <form action="credit_request/create" method="post" onsubmit="return validateFormCredit(this);">
+                <form id="creditForm" action="credit_request/create" method="post">
 
                     <div class="card-body">
                         <div class="form-floating mb-3 p-1">
@@ -159,11 +156,11 @@
                             <label for="applicantCouple"> ID: </label>
                         </div>
                     </div>
-                    <div class="card-footer d-flex justify-content-around">
-                        <button class="btn btn-primary" type="submit">Save</button>
-                    </div>
-                </form>
 
+                </form>
+                <div class="card-footer d-flex justify-content-around">
+                    <button id="submitBothForms" class="btn btn-primary" type="submit">Save</button>
+                </div>
             </div>
         </div>
     </div>
@@ -171,7 +168,6 @@
 
 <th:block layout:fragment="page-scripts">
     <script th:src="@{js/validationsFormCouple.js}"></script>
-    <script th:src="@{js/validationsFormCredit.js}"></script>
 </th:block>
 
 </body>
