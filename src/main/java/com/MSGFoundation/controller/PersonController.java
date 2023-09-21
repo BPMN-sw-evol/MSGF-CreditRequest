@@ -40,14 +40,14 @@ public class PersonController {
         // Validar que haya exactamente dos personas en la lista
         if (people.size() != 2) {
             redirect.addFlashAttribute("errorMsg", "Debe proporcionar exactamente dos personas.");
-            return "redirect:/register-couple"; // Redireccionar con mensaje de error
+            return "redirect:/register-credit"; // Redireccionar con mensaje de error
         }
 
         // Validar cada persona antes de crearlas
         for (Person person : people) {
             if (person.getId().isEmpty()) {
                 redirect.addFlashAttribute("errorMsg", "Información de persona no válida.");
-                return "redirect:/register-couple"; // Redireccionar con mensaje de error
+                return "redirect:/register-credit"; // Redireccionar con mensaje de error
             }
         }
 
@@ -61,7 +61,7 @@ public class PersonController {
         coupleController.createCouple(couple);
 
         redirect.addFlashAttribute("msgSuccessfully", "Las personas se han registrado exitosamente.");
-        return "redirect:/register-couple";
+        return "redirect:/register-credit";
     }
 
     @PutMapping("/update/{id}")

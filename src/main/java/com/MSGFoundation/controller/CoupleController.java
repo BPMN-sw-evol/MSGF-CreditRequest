@@ -61,4 +61,9 @@ public class CoupleController {
     public void deleteCouple(@PathVariable Long id) {
         coupleService.deleteCouple(id);
     }
+
+    @GetMapping("getByIds/{partnerId1}/{partnerId2}")
+    public Long getCoupleByIds(@PathVariable String partnerId1, @PathVariable String partnerId2){
+        return coupleService.getCouplebyIds(partnerId1,partnerId2);
+    }
 }

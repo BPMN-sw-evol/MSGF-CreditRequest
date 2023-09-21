@@ -41,4 +41,14 @@ public class CoupleService {
     public void deleteCouple(Long id) {
         coupleRepository.deleteById(id);
     }
+
+    public Long getCouplebyIds(String partnerId1, String partnerId2) {
+        Couple couple = coupleRepository.findByPartner1IdAndPartner2Id(partnerId1,partnerId2);
+        if(couple != null){
+            return couple.getId();
+        }
+        else{
+            return null;
+        }
+    }
 }

@@ -10,13 +10,14 @@ import java.util.List;
 
 @Controller
 public class HomeController {
+
     @GetMapping({"/", ""})
     public String mainView(Model model) {
         model.addAttribute("titulo","Welcome to the MsgFoundation's CREDIT REQUEST");
         return "inicio";
     }
 
-    @GetMapping("/register-couple")
+    @GetMapping("/register-credit")
     public String registerFormView(Model model){
         List<Person> people = new ArrayList<>();
         people.add(new Person());
@@ -26,8 +27,8 @@ public class HomeController {
         return "views/coupleForm";
     }
 
-    @GetMapping("/register-credit")
+    @GetMapping("/view-credit")
     public String registerCreditView(Model model){
-        return "views/creditForm";
+        return "views/listCredit";
     }
 }
