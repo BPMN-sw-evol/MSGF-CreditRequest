@@ -1,28 +1,30 @@
 package com.MSGFoundation.controller;
 
-import com.MSGFoundation.dto.CreditRequestDTO;
+import com.MSGFoundation.dto.CreditInfoDTO;
 import com.MSGFoundation.model.Couple;
 import com.MSGFoundation.model.CreditRequest;
+import com.MSGFoundation.model.Person;
 import com.MSGFoundation.service.CoupleService;
 import com.MSGFoundation.service.CreditRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @RestController
 @RequestMapping("credit_request")
 public class CreditRequestController {
-    private CreditRequestService creditRequestService;
+    private final CreditRequestService creditRequestService;
     private final CoupleService coupleService;
 
+    private final PersonController personController;
+
     @Autowired
-    public CreditRequestController(CreditRequestService creditRequestService, CoupleService coupleService){
+    public CreditRequestController(CreditRequestService creditRequestService, CoupleService coupleService, PersonController personController){
         this.creditRequestService = creditRequestService;
         this.coupleService = coupleService;
+        this.personController = personController;
     }
 
     @GetMapping("/")
@@ -31,27 +33,29 @@ public class CreditRequestController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<CreditRequest> createCreditRequest(@ModelAttribute CreditRequestDTO creditRequestDTO) {
-        try {
-            CreditRequest creditRequest = new CreditRequest();
-            creditRequest.setMarriageYears(creditRequestDTO.getMarriageYears());
-            creditRequest.setBothEmployees(creditRequestDTO.getBothEmployees());
-            creditRequest.setHousePrices(creditRequestDTO.getHousePrices());
-            creditRequest.setQuotaValue(creditRequestDTO.getQuotaValue());
-            creditRequest.setCoupleSavings(creditRequestDTO.getCoupleSavings());
-            creditRequest.setFinancialViability(false);
-            creditRequest.setIsValid(false);
+    public ResponseEntity<String> createCreditRequest(@RequestBody CreditInfoDTO creditInfoDTO) {
+        List<Person> people = creditInfoDTO.getPeople();
+        Person partner1 = people.get(0);
+        Person partner2 = people.get(1);
 
-            Long coupleId = creditRequestDTO.getApplicantCouple(); // Obtener el ID de la pareja del DTO
-            Couple applicantCouple = coupleService.getCoupleById(coupleId);
-            creditRequest.setApplicantCouple(applicantCouple);
-            CreditRequest createdCreditRequest = creditRequestService.createCreditRequest(creditRequest);
+        personController.createPerson(creditInfoDTO);
 
-            return new ResponseEntity<>(createdCreditRequest, HttpStatus.CREATED);
-        } catch (EntityNotFoundException e) {
-            // Manejar el caso en el que la pareja no se encuentra
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        CreditRequest creditRequest = new CreditRequest();
+        creditRequest.setMarriageYears(creditInfoDTO.getMarriageYears());
+        creditRequest.setBothEmployees(creditInfoDTO.getBothEmployees());
+        creditRequest.setHousePrices(creditInfoDTO.getHousePrices());
+        creditRequest.setQuotaValue(creditInfoDTO.getQuotaValue());
+        creditRequest.setCoupleSavings(creditInfoDTO.getCoupleSavings());
+        creditRequest.setFinancialViability(false);
+        creditRequest.setIsValid(false);
+
+        Long coupleId = coupleService.getCouplebyIds(partner1.getId(), partner2.getId());
+        Couple couple = coupleService.getCoupleById(coupleId);
+        creditRequest.setApplicantCouple(couple);
+
+        creditRequestService.createCreditRequest(creditRequest);
+
+        return ResponseEntity.ok("credit request created");
     }
 
     @PutMapping("/update/{id}")
