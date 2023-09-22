@@ -1,33 +1,3 @@
-document.getElementById("submitBothForms").addEventListener("click", function() {
-    var personForm = document.getElementById("personForm");
-    var creditForm = document.getElementById("creditForm");
-
-    sendForm(personForm, function(response1) {
-        if (response1.status === 200) {
-            sendForm(creditForm, function(response2) {
-                if (response2.status === 200) {
-                    alert("Ambos formularios se enviaron con éxito.");
-                } else {
-                    alert("Error al enviar el segundo formulario.");
-                }
-            });
-        } else {
-            alert("Error al enviar el primer formulario.");
-        }
-    });
-});
-
-function sendForm(form, callback) {
-    fetch(form.action, {
-        method: 'POST',
-        body: new FormData(form)
-    })
-        .then(callback)
-        .catch(function(error) {
-            console.error(error);
-        });
-}
-
 // Función para validar el DNI
 function validateDNI(inputElement) {
 
@@ -146,32 +116,6 @@ function validatePhoneNumber(inputElement) {
     }
 }
 
-function validateFormCouple(form) {
-    const validElementsCouple = form.querySelectorAll('.is-valid');
-    const formElements = form.elements;
-
-
-    // Verifica si todos los campos tienen la clase 'is-valid'
-    if (validElementsCouple.length === formElements.length - 1) {
-        Swal.fire({
-            icon: 'success',
-            title: 'success!',
-            text: 'the couple has been successfully registered',
-        });
-        return true; // Envía el formulario si todos los campos son válidos
-    } else {
-        // Muestra una alerta si algún campo no es válido
-        Swal.fire({
-            icon: 'error',
-            title: 'Error!',
-            text: 'please enter correct information!!!!!!!',
-        });
-        return false; // Evita el envío del formulario
-    }
-}
-
-// Validations Credits
-
 function validateMarriageYears(inputElement) {
     const Years = inputElement.value;
     if (!inputElement.value.trim()) {
@@ -253,28 +197,12 @@ function validateCoupleSavings(inputElement) {
     }
 }
 
-function validateApplicantCouple(inputElement) {
-    const IdCouple = inputElement.value;
-    // Aquí puedes realizar una validación personalizada según tus requisitos.
-    // Si se cumple la validación, marca el campo como válido.
-    // Si no se cumple, marca el campo como inválido y muestra un mensaje de error.
-    if (!(/^[0-9]/).test(inputElement.value.trim())) {
-        inputElement.classList.remove("is-valid");
-        inputElement.classList.add("is-invalid");
-        return false;
-    } else {
-        inputElement.classList.remove("is-invalid");
-        inputElement.classList.add("is-valid");
-        return true;
-    }
-}
-
-function validateFormCredit(form) {
-    const validElementsCredit = form.querySelectorAll('.is-valid');
+function validateFormField(form) {
+    const validElementsCouple = form.querySelectorAll('.is-valid');
     const formElements = form.elements;
 
     // Verifica si todos los campos tienen la clase 'is-valid'
-    if (validElementsCredit.length === formElements.length - 1) {
+    if (validElementsCouple.length === formElements.length - 1) {
         Swal.fire({
             icon: 'success',
             title: 'success!',
@@ -286,7 +214,7 @@ function validateFormCredit(form) {
         Swal.fire({
             icon: 'error',
             title: 'Error!',
-            text: 'please enter correct information',
+            text: 'please enter correct information!!!!!!!',
         });
         return false; // Evita el envío del formulario
     }

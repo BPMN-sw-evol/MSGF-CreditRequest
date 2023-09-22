@@ -33,7 +33,7 @@ public class CreditRequestController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createCreditRequest(@RequestBody CreditInfoDTO creditInfoDTO) {
+    public ResponseEntity<String> createCreditRequest(@ModelAttribute CreditInfoDTO creditInfoDTO) {
         List<Person> people = creditInfoDTO.getPeople();
         Person partner1 = people.get(0);
         Person partner2 = people.get(1);
