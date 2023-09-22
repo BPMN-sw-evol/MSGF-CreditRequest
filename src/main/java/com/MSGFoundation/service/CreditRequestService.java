@@ -36,7 +36,7 @@ public class CreditRequestService {
         creditRequestRepository.deleteById(id);
     }
 
-    public CreditRequest findCreditByCouple(Couple couple) {
+    public List<CreditRequest> findCreditByCouple(Couple couple) {
         return creditRequestRepository.findByApplicantCouple(couple);
     }
 }

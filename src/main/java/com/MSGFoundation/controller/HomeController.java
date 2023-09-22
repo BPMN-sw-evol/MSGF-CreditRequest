@@ -43,29 +43,17 @@ public class HomeController {
     @GetMapping("/view-credit")
     public String registerCreditView(@RequestParam(name = "coupleId", required = false) Long coupleId, Model model){
         if(coupleId==null) {
-            coupleId = 1L;
+            coupleId = 3L;
         }
         Couple couple = coupleController.getCoupleById(coupleId);
-        CreditRequest creditInfo = creditRequestController.findCreditRequestByCouple(coupleId).getBody();
+        List<CreditRequest> creditInfo = creditRequestController.findCreditRequestByCouple(coupleId).getBody();
 
         String idPartner1 = couple.getPartner1().getId();
         String idPartner2 = couple.getPartner2().getId();
 
         model.addAttribute("idPartner1",idPartner1);
         model.addAttribute("idPartner2",idPartner2);
-        if(creditInfo!=null) {
-
-            model.addAttribute("creditCod", creditInfo.getCodRequest());
-            model.addAttribute("housePrice", creditInfo.getHousePrices());
-            model.addAttribute("quotaValue", creditInfo.getQuotaValue());
-            model.addAttribute("requestDate", creditInfo.getRequestDate().getYear()
-                    +"-"+creditInfo.getRequestDate().getMonthValue()
-                    +"-"+creditInfo.getRequestDate().getDayOfMonth()
-                    +" "+creditInfo.getRequestDate().getHour()
-                    +":"+creditInfo.getRequestDate().getMinute()
-                    +":"+creditInfo.getRequestDate().getSecond());
-            model.addAttribute("status", creditInfo.getStatus());
-        }
+        model.addAttribute("creditInfo",creditInfo);
 
         return "views/listCredit";
     }

@@ -37,12 +37,12 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td><span th:text="${creditCod}"></span></td>
-                            <td><span th:text="${housePrice}"></span></td>
-                            <td><span th:text="${quotaValue}"></span></td>
-                            <td><span th:text="${requestDate}"></span></td>
-                            <td><span th:text="${status}"></span></td>
+                        <tr th:each="creditRequest : ${creditInfo}">
+                            <td><span th:text="${creditRequest.codRequest}"></span></td>
+                            <td><span th:text="${creditRequest.housePrices}"></span></td>
+                            <td><span th:text="${creditRequest.quotaValue}"></span></td>
+                            <td><span th:text="${creditRequest.requestDate}"></span></td>
+                            <td><span th:text="${creditRequest.status}"></span></td>
                         </tr>
                         </tbody>
                     </table>

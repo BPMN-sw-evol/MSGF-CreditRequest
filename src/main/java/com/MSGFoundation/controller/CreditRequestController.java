@@ -39,10 +39,10 @@ public class CreditRequestController {
     }
 
     @GetMapping("/{coupleId}")
-    public ResponseEntity<CreditRequest> findCreditRequestByCouple(@PathVariable Long coupleId){
+    public ResponseEntity<List<CreditRequest>> findCreditRequestByCouple(@PathVariable Long coupleId){
         try{
             Couple couple = coupleService.getCoupleById(coupleId);
-            CreditRequest creditRequest = creditRequestService.findCreditByCouple(couple);
+            List<CreditRequest> creditRequest = creditRequestService.findCreditByCouple(couple);
             return ResponseEntity.ok(creditRequest);
         }catch (EntityNotFoundException e){
             return ResponseEntity.notFound().build();
