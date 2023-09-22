@@ -11,43 +11,45 @@
 
 <section class="nombreClass">
     <div class="container-fluid" layout:fragment="page-content">
-        <form action="credit_request/create" method="post">
+        <div class="col mt-4 mb-3">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <h1 class="text-center">Application History</h1>
+                    </div>
+                </div>
+                <div class="card-body card-text mt-3">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad at consequatur consequuntur cupiditate dolores, impedit iure quibusdam sequi? Adipisci cum deleniti dolore dolorum molestias obcaecati quae quia sequi, tempora vero.</p>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Credit Cod</th>
+                            <th scope="col">House Price</th>
+                            <th scope="col">Quota Value</th>
+                            <th scope="col">Request Date</th>
+                            <th scope="col">State</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                            <td>@mdo</td>
+                            <td>@mdo</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
-            <div>
-                <label for="marriageYears">Years of Marriage:</label>
-                <input type="number" id="marriageYears" name="marriageYears" placeholder="Enter years of marriage" required>
-            </div>
-            <div>
-                <label for="bothEmployees">Both Employed:</label>
-                <input type="checkbox" id="bothEmployees" name="bothEmployees">
-            </div>
-            <div>
-                <label for="housePrices">House Prices:</label>
-                <input type="number" id="housePrices" name="housePrices" placeholder="Enter house prices">
-            </div>
-            <div>
-                <label for="quotaValue">Quota Value:</label>
-                <input type="number" id="quotaValue" name="quotaValue" placeholder="Enter quota value">
-            </div>
-            <div>
-                <label for="coupleSavings">Couple Savings:</label>
-                <input type="number" id="coupleSavings" name="coupleSavings" placeholder="Enter couple savings">
-            </div>
-            <div>
-                <label for="applicantCouple"> ID: </label>
-                <input id="applicantCouple" type="text" name="applicantCouple" placeholder="Enter your applicantCouple ID" required>
-            </div>
-
-            <button>Guardar</button>
-
-        </form>
     </div>
 </section>
 
 <th:block layout:fragment="page-scripts">
-    <script>
-
-    </script>
 </th:block>
 
 </body>

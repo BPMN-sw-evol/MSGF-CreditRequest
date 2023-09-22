@@ -24,7 +24,7 @@ public class HomeController {
         people.add(new Person());
         model.addAttribute("people",people);
 
-        return "views/coupleForm";
+        return "views/creditForm";
     }
 
     @GetMapping("/view-credit")
