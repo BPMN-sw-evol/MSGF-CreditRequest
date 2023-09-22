@@ -1,5 +1,6 @@
 package com.MSGFoundation.service;
 
+import com.MSGFoundation.model.Couple;
 import com.MSGFoundation.model.CreditRequest;
 import com.MSGFoundation.repository.ICreditRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +34,9 @@ public class CreditRequestService {
 
     public void deleteCreditRequest(Long id){
         creditRequestRepository.deleteById(id);
+    }
+
+    public CreditRequest findCreditByCouple(Couple couple) {
+        return creditRequestRepository.findByApplicantCouple(couple);
     }
 }

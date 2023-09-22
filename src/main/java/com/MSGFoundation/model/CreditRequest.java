@@ -3,6 +3,7 @@ package com.MSGFoundation.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "CREDIT_REQUEST")
@@ -22,10 +23,10 @@ public class CreditRequest {
     private Float quotaValue;
     @Column(name = "coupleSavings")
     private Float coupleSavings;
-    @Column(name = "financialViability")
-    private Boolean financialViability;
-    @Column(name = "isValid")
-    private Boolean isValid;
+    @Column(name = "status")
+    private String status;
+    @Column(name = "requestDate")
+    private LocalDateTime requestDate;
     @JoinColumn(name = "FK_COUPLE")
     @OneToOne
     private Couple applicantCouple;

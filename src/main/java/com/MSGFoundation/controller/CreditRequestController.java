@@ -6,10 +6,17 @@ import com.MSGFoundation.model.CreditRequest;
 import com.MSGFoundation.model.Person;
 import com.MSGFoundation.service.CoupleService;
 import com.MSGFoundation.service.CreditRequestService;
+import com.MSGFoundation.util.RequestStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
+import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -17,7 +24,6 @@ import java.util.List;
 public class CreditRequestController {
     private final CreditRequestService creditRequestService;
     private final CoupleService coupleService;
-
     private final PersonController personController;
 
     @Autowired
@@ -32,8 +38,18 @@ public class CreditRequestController {
         return creditRequestService.getAllCreditRequest();
     }
 
+    @GetMapping("/{coupleId}")
+    public ResponseEntity<CreditRequest> findCreditRequestByCouple(@PathVariable Long coupleId){
+        try{
+            Couple couple = coupleService.getCoupleById(coupleId);
+            CreditRequest creditRequest = creditRequestService.findCreditByCouple(couple);
+            return ResponseEntity.ok(creditRequest);
+        }catch (EntityNotFoundException e){
+            return ResponseEntity.notFound().build();
+        }
+    }
     @PostMapping("/create")
-    public ResponseEntity<String> createCreditRequest(@ModelAttribute CreditInfoDTO creditInfoDTO) {
+    public RedirectView createCreditRequest(@ModelAttribute CreditInfoDTO creditInfoDTO, RedirectAttributes redirectAttributes) {
         List<Person> people = creditInfoDTO.getPeople();
         Person partner1 = people.get(0);
         Person partner2 = people.get(1);
@@ -46,16 +62,18 @@ public class CreditRequestController {
         creditRequest.setHousePrices(creditInfoDTO.getHousePrices());
         creditRequest.setQuotaValue(creditInfoDTO.getQuotaValue());
         creditRequest.setCoupleSavings(creditInfoDTO.getCoupleSavings());
-        creditRequest.setFinancialViability(false);
-        creditRequest.setIsValid(false);
+        creditRequest.setStatus(RequestStatus.DRAFT.toString());
+        LocalDateTime currentDate = LocalDateTime.now();
+        creditRequest.setRequestDate(currentDate);
 
         Long coupleId = coupleService.getCouplebyIds(partner1.getId(), partner2.getId());
         Couple couple = coupleService.getCoupleById(coupleId);
         creditRequest.setApplicantCouple(couple);
+        redirectAttributes.addAttribute("coupleId",coupleId);
 
         creditRequestService.createCreditRequest(creditRequest);
 
-        return ResponseEntity.ok("credit request created");
+        return new RedirectView("/view-credit");
     }
 
     @PutMapping("/update/{id}")
