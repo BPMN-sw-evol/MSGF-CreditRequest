@@ -28,3 +28,7 @@ body {
   justify-content: space-evenly;
   gap: 2vh;
 }
+
+form{
+  overflow-y: auto;
+}

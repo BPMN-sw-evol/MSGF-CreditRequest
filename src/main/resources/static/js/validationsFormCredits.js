@@ -200,23 +200,27 @@ function validateCoupleSavings(inputElement) {
 function validateFormField(form) {
     const validElementsCouple = form.querySelectorAll('.is-valid');
     const formElements = form.elements;
-
     // Verifica si todos los campos tienen la clase 'is-valid'
     if (validElementsCouple.length === formElements.length - 1) {
         Swal.fire({
+            position: 'center',
             icon: 'success',
             title: 'success!',
             text: 'the couple has been successfully registered',
-        });
+            showConfirmButton: false,
+            timer: 1500
+        })
         return true; // Envía el formulario si todos los campos son válidos
     } else {
         // Muestra una alerta si algún campo no es válido
         Swal.fire({
+            position: 'center',
             icon: 'error',
             title: 'Error!',
-            text: 'please enter correct information!!!!!!!',
-        });
+            text: 'please enter correct information',
+            showConfirmButton: false,
+            timer: 1500
+        })
         return false; // Evita el envío del formulario
     }
 }
-

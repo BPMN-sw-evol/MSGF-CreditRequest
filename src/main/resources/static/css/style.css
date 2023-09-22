@@ -242,7 +242,7 @@ span.label-mhover{
     color: #FFD054;
     transform: scale(1.7);
 }
-/*Imagenes Pequeñas y Banners ===========================*/
+/*Imagenes Pequeï¿½as y Banners ===========================*/
 .imagen:hover {
 -webkit-transform: rotateY(180deg);
 -webkit-transform-style: preserve-3d;
@@ -509,7 +509,6 @@ input.material-control:focus ~ .highlight {
 =                                        Other styles                                                  =
 ========================================================================================================*/
 .modal-body {
-    max-height: 400px;
     overflow-y: scroll;
 }
 /*=======================================================================================================

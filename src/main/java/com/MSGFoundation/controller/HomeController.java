@@ -18,10 +18,13 @@ import java.util.List;
 public class HomeController {
     private final CreditRequestController creditRequestController;
     private final CoupleController coupleController;
+    private final PersonController personController;
+
     @Autowired
-    public HomeController(CreditRequestController creditRequestController, CoupleController coupleController) {
+    public HomeController(CreditRequestController creditRequestController, CoupleController coupleController, PersonController personController) {
         this.creditRequestController = creditRequestController;
         this.coupleController = coupleController;
+        this.personController = personController;
     }
 
     @GetMapping({"/", ""})
@@ -43,7 +46,7 @@ public class HomeController {
     @GetMapping("/view-credit")
     public String registerCreditView(@RequestParam(name = "coupleId", required = false) Long coupleId, Model model){
         if(coupleId==null) {
-            coupleId = 3L;
+            coupleId = 1L;
         }
         Couple couple = coupleController.getCoupleById(coupleId);
         List<CreditRequest> creditInfo = creditRequestController.findCreditRequestByCouple(coupleId).getBody();
@@ -51,8 +54,14 @@ public class HomeController {
         String idPartner1 = couple.getPartner1().getId();
         String idPartner2 = couple.getPartner2().getId();
 
-        model.addAttribute("idPartner1",idPartner1);
-        model.addAttribute("idPartner2",idPartner2);
+        Person partner1 = personController.getPersonById(idPartner1);
+        Person partner2 = personController.getPersonById(idPartner2);
+
+        List<Person> people = new ArrayList<>();
+        people.add(partner1);
+        people.add(partner2);
+
+        model.addAttribute("people",people);
         model.addAttribute("creditInfo",creditInfo);
 
         return "views/listCredit";
