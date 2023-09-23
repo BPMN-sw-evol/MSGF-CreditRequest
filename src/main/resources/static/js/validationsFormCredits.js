@@ -1,7 +1,26 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const disabledInputs = document.querySelectorAll('input[disabled][value]');
+    // Obtén el formulario por su ID o cualquier otro selector
+    const form = document.getElementById('personForm'); // Reemplaza 'personForm' con el ID de tu formulario
 
-    disabledInputs.forEach(function (input) {
+// Obtén todos los elementos input dentro del formulario
+    const inputElements = form.querySelectorAll('input');
+
+// Itera a través de los elementos input
+    inputElements.forEach((inputElement) => {
+        // Verifica si el input no está deshabilitado
+        if (!inputElement.disabled) {
+            const valorInput = inputElement.value;
+
+            // Verifica si el input tiene un valor y agrega la clase 'is-valid' si es necesario
+            if (valorInput.trim() !== '') {
+                inputElement.classList.add('is-valid');
+            }
+        }
+    });
+
+    const disabledInputsWithValue = document.querySelectorAll('input[disabled][value]');
+
+    disabledInputsWithValue.forEach(function (input) {
         input.classList.add('is-valid');
     });
 });

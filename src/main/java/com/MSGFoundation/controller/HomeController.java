@@ -61,6 +61,7 @@ public class HomeController {
         people.add(partner1);
         people.add(partner2);
 
+        System.out.println(partner1.getGender() + partner2.getGender());
         model.addAttribute("people",people);
         model.addAttribute("creditInfo",creditInfo);
 

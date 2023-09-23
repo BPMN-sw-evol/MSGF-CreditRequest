@@ -23,14 +23,14 @@
                 <label for="email1"> E-Mail: </label>
             </div>
             <div class="form-floating mb-3 p-1">
-                <select class="form-select" id="gender1" name="people[0].gender" required
-                        onblur="validateGender(this)">
-                    <option value="" disabled selected>Select your gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Woman">Woman</option>
+                <select class="form-select" id="gender1" name="people[0].gender" required onblur="validateGender(this)">
+                    <option value="" th:selected="${people[0].getGender() == null or people[0].getGender() == ''}" disabled>Select your gender</option>
+                    <option value="Male" th:selected="${people[0].getGender() != null and people[0].getGender() == 'Male'}">Male</option>
+                    <option value="Woman" th:selected="${people[0].getGender() != null and people[0].getGender() == 'Woman'}">Woman</option>
                 </select>
-                <label for="gender1"> Gender: </label>
+                <label for="gender1">Gender:</label>
             </div>
+
             <div class="form-floating mb-3 p-1">
                 <input class="form-control" id="birthDate1" type="date" name="people[0].birthDate"
                        placeholder="Enter your birth date" required
@@ -69,14 +69,14 @@
                 <label for="email2"> E-Mail: </label>
             </div>
             <div class="form-floating mb-3 p-1">
-                <select class="form-select" id="gender2" name="people[1].gender" required
-                        onblur="validateGender(this)">
-                    <option value="" disabled selected>Select your gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Woman">Woman</option>
+                <select class="form-select" id="gender2" name="people[1].gender" required onblur="validateGender(this)">
+                    <option value="" th:selected="${people[1].getGender() == null or people[1].getGender() == ''}" disabled>Select your gender</option>
+                    <option value="Male" th:selected="${people[1].getGender() == 'Male'}">Male</option>
+                    <option value="Woman" th:selected="${people[1].getGender() == 'Woman'}">Woman</option>
                 </select>
-                <label for="gender2"> Gender: </label>
+                <label for="gender2">Gender:</label>
             </div>
+
             <div class="form-floating mb-3 p-1">
                 <input class="form-control" id="birthDate2" type="date" name="people[1].birthDate"
                        placeholder="Enter your birth date" required
