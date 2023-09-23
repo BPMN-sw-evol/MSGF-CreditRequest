@@ -1,3 +1,11 @@
+document.addEventListener("DOMContentLoaded", function () {
+    const disabledInputs = document.querySelectorAll('input[disabled][value]');
+
+    disabledInputs.forEach(function (input) {
+        input.classList.add('is-valid');
+    });
+});
+
 // Función para validar el DNI
 function validateDNI(inputElement) {
 
