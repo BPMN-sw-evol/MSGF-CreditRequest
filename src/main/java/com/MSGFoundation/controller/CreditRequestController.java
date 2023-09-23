@@ -76,8 +76,22 @@ public class CreditRequestController {
         return new RedirectView("/view-credit");
     }
 
-    @PutMapping("/update/{id}")
-    public CreditRequest updateCreditRequest(@PathVariable Long id, @RequestBody CreditRequest creditRequest){
+    @PostMapping("/update")
+    public CreditRequest updateCreditRequest(@ModelAttribute("creditInfoDTO") CreditInfoDTO creditInfoDTO){
+
+        System.out.println("esto es el id: "+creditInfoDTO.getApplicantCoupleId());
+        List<Person> people = creditInfoDTO.getPeople();
+        System.out.println(people.get(0).toString());
+        personController.updatePerson(people.get(0).getId(),people.get(0));
+        personController.updatePerson(people.get(1).getId(),people.get(1));
+        Long id = 1L;
+        CreditRequest creditRequest = new CreditRequest();
+        creditRequest.setMarriageYears(creditInfoDTO.getMarriageYears());
+        creditRequest.setBothEmployees(creditInfoDTO.getBothEmployees());
+        creditRequest.setHousePrices(creditInfoDTO.getHousePrices());
+        creditRequest.setQuotaValue(creditInfoDTO.getQuotaValue());
+        creditRequest.setCoupleSavings(creditInfoDTO.getCoupleSavings());
+
         return creditRequestService.updateCreditRequest(id, creditRequest);
     }
 

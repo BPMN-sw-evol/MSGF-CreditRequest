@@ -63,7 +63,7 @@
                             <h5 class="modal-title" id="exampleModalLabel">New message</h5>
                             <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form id="personForm" action="credit_request/update" method="post"
+                        <form id="personForm" th:action="@{/credit-request/update}" th:object="${creditInfoDTO}" method="post"
                               onsubmit="return validateFormField(this);">
 
                             <div class="modal-body">
