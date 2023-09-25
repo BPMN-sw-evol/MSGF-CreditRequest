@@ -39,4 +39,9 @@ public class CreditRequestService {
     public List<CreditRequest> findCreditByCouple(Couple couple) {
         return creditRequestRepository.findByApplicantCouple(couple);
     }
+
+    public CreditRequest getCreditRequestByProcessId(String processId) {
+        return creditRequestRepository.findByProcessId(processId);
+    }
+
 }

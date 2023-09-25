@@ -11,4 +11,5 @@ import java.util.List;
 public interface ICreditRequestRepository extends JpaRepository<CreditRequest, Long> {
 
     List<CreditRequest> findByApplicantCouple(Couple applicantCouple);
+    CreditRequest findByProcessId(String processId);
 }

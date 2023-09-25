@@ -1,5 +1,6 @@
 package com.MSGFoundation.model;
 
+
 import lombok.Data;
 
 import javax.persistence.*;
@@ -13,6 +14,8 @@ public class CreditRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "codRequest")
     private Long codRequest;
+    @Column(name = "processId")
+    private String processId;
     @Column(name = "marriageYears")
     private Long marriageYears;
     @Column(name = "bothEmployees")

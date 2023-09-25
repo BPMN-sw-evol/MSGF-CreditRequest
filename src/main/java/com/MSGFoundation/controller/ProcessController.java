@@ -20,7 +20,7 @@ public class ProcessController {
         this.restTemplate = restTemplate;
     }
 
-    public void startProcessInstance(CreditInfoDTO creditInfoDTO){
+    public String startProcessInstance(CreditInfoDTO creditInfoDTO){
 
         // Construir el cuerpo de la solicitud para Camunda
         HttpHeaders headers = new HttpHeaders();
@@ -45,12 +45,14 @@ public class ProcessController {
         String camundaUrl = "http://localhost:9000/engine-rest/process-definition/key/MSGF-Test/start";
         try {
             // Realizar la solicitud POST a Camunda
-            ResponseEntity<Void> response = restTemplate.postForEntity(camundaUrl, requestEntity, Void.class);
-            System.out.println("Camunda process instance started");
-            System.out.println(response);
+            ResponseEntity<Map> response = restTemplate.postForEntity(camundaUrl, requestEntity, Map.class);
+            String processId = String.valueOf(response.getBody().get("id"));
+            System.out.println("Camunda process instance started with ID: "+processId);
+            return processId;
         } catch (HttpClientErrorException e) {
             String errorMessage = e.getResponseBodyAsString();
             System.err.println("Error en la solicitud a Camunda: " + errorMessage);
+            return null;
         }
     }
 }

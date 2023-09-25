@@ -72,7 +72,15 @@ public class CreditRequestController {
         redirectAttributes.addAttribute("coupleId",coupleId);
 
         creditRequestService.createCreditRequest(creditRequest);
-        processController.startProcessInstance(creditInfoDTO);
+        String processId = processController.startProcessInstance(creditInfoDTO);
+        List<CreditRequest> updateCredit = creditRequestService.findCreditByCouple(couple);
+        for (CreditRequest request : updateCredit) {
+            if ("DRAFT".equals(request.getStatus())) {
+                System.out.println("Solicitud en estado draft: " + request.getCodRequest());
+                request.setProcessId(processId);
+                creditRequestService.updateCreditRequest(request.getCodRequest(), request);
+            }
+        }
 
         return new RedirectView("/view-credit");
     }
@@ -101,4 +109,8 @@ public class CreditRequestController {
         creditRequestService.deleteCreditRequest(id);
     }
 
+    @GetMapping("/findbyid/{processId}")
+    public CreditRequest getCreditRequestByProcessId(@PathVariable String processId){
+        return creditRequestService.getCreditRequestByProcessId(processId);
+    }
 }

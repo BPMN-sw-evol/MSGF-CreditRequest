@@ -43,7 +43,7 @@
                         </thead>
                         <tbody>
                         <tr th:each="creditRequest : ${creditInfo}">
-                            <td><span th:text="${creditRequest.codRequest}"></span></td>
+                            <td><span th:text="${creditRequest.processId}"></span></td>
                             <td><span th:text="${creditRequest.housePrices}"></span></td>
                             <td><span th:text="${creditRequest.quotaValue}"></span></td>
                             <td><span th:text="${creditRequest.requestDate}"></span></td>

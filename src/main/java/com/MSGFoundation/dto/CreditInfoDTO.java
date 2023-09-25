@@ -9,6 +9,7 @@ import java.util.List;
 public class CreditInfoDTO {
     private List<Person> people;
     private Long applicantCoupleId;
+    private String processId;
     private Long marriageYears;
     private Boolean bothEmployees;
     private Long housePrices;
