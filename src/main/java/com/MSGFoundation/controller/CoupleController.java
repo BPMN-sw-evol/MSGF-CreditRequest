@@ -6,6 +6,7 @@ import com.MSGFoundation.model.Person;
 import com.MSGFoundation.service.CoupleService;
 import com.MSGFoundation.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -65,5 +66,14 @@ public class CoupleController {
     @GetMapping("getByIds/{partnerId1}/{partnerId2}")
     public Long getCoupleByIds(@PathVariable String partnerId1, @PathVariable String partnerId2){
         return coupleService.getCouplebyIds(partnerId1,partnerId2);
+    }
+
+    public ResponseEntity<Long> getCouplebyIds(@PathVariable String id1, @PathVariable String id2) {
+        Long coupleId = coupleService.getCouplebyIds(id1,id2);
+        if (coupleId != null) {
+            return ResponseEntity.ok(coupleId);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
