@@ -8,16 +8,21 @@ import com.MSGFoundation.service.CoupleService;
 import com.MSGFoundation.service.CreditRequestService;
 import com.MSGFoundation.util.RequestStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.http.HttpHeaders;
 
 import javax.persistence.EntityNotFoundException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("credit_request")
@@ -25,12 +30,14 @@ public class CreditRequestController {
     private final CreditRequestService creditRequestService;
     private final CoupleService coupleService;
     private final PersonController personController;
+    private final RestTemplate restTemplate;
 
     @Autowired
-    public CreditRequestController(CreditRequestService creditRequestService, CoupleService coupleService, PersonController personController){
+    public CreditRequestController(CreditRequestService creditRequestService, CoupleService coupleService, PersonController personController, RestTemplate restTemplate){
         this.creditRequestService = creditRequestService;
         this.coupleService = coupleService;
         this.personController = personController;
+        this.restTemplate = restTemplate;
     }
 
     @GetMapping("/")
@@ -72,6 +79,37 @@ public class CreditRequestController {
         redirectAttributes.addAttribute("coupleId",coupleId);
 
         creditRequestService.createCreditRequest(creditRequest);
+
+        // Construir el cuerpo de la solicitud para Camunda
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        // Crear un mapa para los atributos que deseas enviar
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("marriageYears", Map.of("value", creditInfoDTO.getMarriageYears(), "type", "Long"));
+        variables.put("bothEmployees", Map.of("value", creditInfoDTO.getBothEmployees(), "type", "Boolean"));
+        variables.put("housePrices", Map.of("value", creditInfoDTO.getHousePrices(), "type", "Long"));
+        variables.put("quotaValue", Map.of("value", creditInfoDTO.getQuotaValue(), "type", "Long"));
+        variables.put("coupleSavings", Map.of("value", creditInfoDTO.getCoupleSavings(), "type", "Long"));
+        variables.put("applicantCouple", Map.of("value", coupleId, "type", "Long"));
+
+        // Crear el cuerpo de la solicitud
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("variables", variables);
+
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
+
+        // Realizar la solicitud POST a Camunda
+        String camundaUrl = "http://localhost:9000/engine-rest/process-definition/key/MSGF-Test/start";
+        try {
+            // Realizar la solicitud POST a Camunda
+            ResponseEntity<Void> response = restTemplate.postForEntity(camundaUrl, requestEntity, Void.class);
+            System.out.println("Camunda process instance started");
+            System.out.println(response);
+        } catch (HttpClientErrorException e) {
+            String errorMessage = e.getResponseBodyAsString();
+            System.err.println("Error en la solicitud a Camunda: " + errorMessage);
+        }
 
         return new RedirectView("/view-credit");
     }

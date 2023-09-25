@@ -18,11 +18,11 @@ public class CreditRequest {
     @Column(name = "bothEmployees")
     private Boolean bothEmployees;
     @Column(name = "housePrices")
-    private Float housePrices;
+    private Long housePrices;
     @Column(name = "quotaValue")
-    private Float quotaValue;
+    private Long quotaValue;
     @Column(name = "coupleSavings")
-    private Float coupleSavings;
+    private Long coupleSavings;
     @Column(name = "status")
     private String status;
     @Column(name = "requestDate")

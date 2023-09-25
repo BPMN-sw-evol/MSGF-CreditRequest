@@ -11,8 +11,8 @@ public class CreditInfoDTO {
     private Long applicantCoupleId;
     private Long marriageYears;
     private Boolean bothEmployees;
-    private Float housePrices;
-    private Float quotaValue;
-    private Float coupleSavings;
+    private Long housePrices;
+    private Long quotaValue;
+    private Long coupleSavings;
     private String status;
 }
