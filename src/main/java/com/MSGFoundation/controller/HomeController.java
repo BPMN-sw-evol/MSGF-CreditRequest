@@ -25,7 +25,7 @@ public class HomeController {
         this.personController = personController;
     }
 
-    @GetMapping({"/", ""})
+    @GetMapping({"/home"})
     public String mainView(Model model) {
         model.addAttribute("titulo","Welcome to the MsgFoundation's CREDIT REQUEST");
         return "inicio";

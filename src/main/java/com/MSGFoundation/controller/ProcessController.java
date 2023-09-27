@@ -1,10 +1,8 @@
 package com.MSGFoundation.controller;
 
 import com.MSGFoundation.dto.CreditInfoDTO;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -48,6 +46,37 @@ public class ProcessController {
             ResponseEntity<Map> response = restTemplate.postForEntity(camundaUrl, requestEntity, Map.class);
             String processId = String.valueOf(response.getBody().get("id"));
             System.out.println("Camunda process instance started with ID: "+processId);
+            return processId;
+        } catch (HttpClientErrorException e) {
+            String errorMessage = e.getResponseBodyAsString();
+            System.err.println("Error en la solicitud a Camunda: " + errorMessage);
+            return null;
+        }
+    }
+
+    @GetMapping("/complete")
+    public String completeTask(String taskId, boolean isValid) {
+        // Construir el cuerpo de la solicitud para Camunda
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        // Crear un mapa para los atributos que deseas enviar
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("marriageYears", Map.of("value", isValid, "type", "Long"));
+
+        // Crear el cuerpo de la solicitud
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("variables", variables);
+
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
+
+        // Realizar la solicitud POST a Camunda
+        String camundaUrl = "http://localhost:9000/engine-rest/task/" + taskId + "/complete";
+        try {
+            // Realizar la solicitud POST a Camunda
+            ResponseEntity<Map> response = restTemplate.postForEntity(camundaUrl, requestEntity, Map.class);
+            String processId = String.valueOf(response.getBody().get("id"));
+            System.out.println("Task completed: "+processId);
             return processId;
         } catch (HttpClientErrorException e) {
             String errorMessage = e.getResponseBodyAsString();
