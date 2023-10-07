@@ -1,8 +1,10 @@
 package com.MSGFoundation.controller;
 
+import com.MSGFoundation.dto.CreditInfoDTO;
 import com.MSGFoundation.model.Couple;
 import com.MSGFoundation.model.CreditRequest;
 import com.MSGFoundation.model.Person;
+import com.MSGFoundation.util.RequestStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +27,7 @@ public class HomeController {
         this.personController = personController;
     }
 
-    @GetMapping({"/home"})
+    @GetMapping({"/home",""})
     public String mainView(Model model) {
         model.addAttribute("titulo","Welcome to the MsgFoundation's CREDIT REQUEST");
         return "inicio";
@@ -59,9 +61,9 @@ public class HomeController {
         people.add(partner1);
         people.add(partner2);
 
-        System.out.println(partner1.getGender() + partner2.getGender());
         model.addAttribute("people",people);
         model.addAttribute("creditInfo",creditInfo);
+
 
         return "views/listCredit";
     }
