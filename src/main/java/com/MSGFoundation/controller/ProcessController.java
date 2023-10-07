@@ -3,6 +3,7 @@ package com.MSGFoundation.controller;
 import com.MSGFoundation.dto.CreditInfoDTO;
 import com.MSGFoundation.service.ProcessService;
 import org.springframework.http.*;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -10,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController
+@Controller
 public class ProcessController {
     private final ProcessService processService;
 
@@ -19,9 +20,11 @@ public class ProcessController {
     }
 
     @PostMapping("/startProcess")
-    public String startProcessInstance(@ModelAttribute CreditInfoDTO creditInfoDTO){
-        return this.processService.startProcessInstance(creditInfoDTO);
+    public String startProcessInstance(@ModelAttribute CreditInfoDTO creditInfoDTO) {
+        this.processService.startProcessInstance(creditInfoDTO);
+        return "redirect:/view-credit"; // Redirige a la URL del método view-credit
     }
+
 
     @GetMapping("/complete")
     public String completeTask(String taskId, boolean isValid) {

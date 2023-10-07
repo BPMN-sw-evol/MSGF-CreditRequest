@@ -50,11 +50,9 @@ public class ProcessService {
             // Realizar la solicitud POST a Camunda
             ResponseEntity<Map> response = restTemplate.postForEntity(camundaStartUrl, requestEntity, Map.class);
             String processId = String.valueOf(response.getBody().get("id"));
-            System.out.println("Camunda process instance started with ID: "+processId);
             return processId;
         } catch (HttpClientErrorException e) {
             String errorMessage = e.getResponseBodyAsString();
-            System.err.println("Error en la solicitud a Camunda: " + errorMessage);
             return null;
         }
     }
