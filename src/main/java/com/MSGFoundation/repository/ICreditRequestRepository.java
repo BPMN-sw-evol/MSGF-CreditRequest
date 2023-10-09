@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ICreditRequestRepository extends JpaRepository<CreditRequest, Long> {
-
     List<CreditRequest> findByApplicantCouple(Couple applicantCouple);
     CreditRequest findByProcessId(String processId);
 }

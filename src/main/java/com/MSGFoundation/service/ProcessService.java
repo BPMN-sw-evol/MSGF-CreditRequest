@@ -1,6 +1,7 @@
 package com.MSGFoundation.service;
 
 import com.MSGFoundation.dto.CreditInfoDTO;
+import com.MSGFoundation.model.CreditRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -16,12 +17,16 @@ import java.util.Map;
 @Service
 public class ProcessService {
     private final RestTemplate restTemplate;
+
+    private final CreditRequestService creditRequestService;
+
     @Value("${camunda.url.start}")
     private String camundaStartUrl;
 
     @Autowired
-    public ProcessService(RestTemplate restTemplate) {
+    public ProcessService(RestTemplate restTemplate, CreditRequestService creditRequestService) {
         this.restTemplate = restTemplate;
+        this.creditRequestService = creditRequestService;
     }
 
     public String startProcessInstance(CreditInfoDTO creditInfoDTO){
@@ -60,7 +65,7 @@ public class ProcessService {
         }
     }
 
-    public String getTaskNameByProcessId(String processId) {
+    public Map<String, String> getTaskInfoByProcessId(String processId) {
         // Construir la URL para consultar las tareas relacionadas con el proceso
         String camundaUrl = "http://localhost:9000/engine-rest/task?processInstanceId=" + processId;
 
@@ -71,10 +76,18 @@ public class ProcessService {
             // Verificar si la respuesta contiene tareas
             List<Map> tasks = response.getBody();
             if (tasks != null && !tasks.isEmpty()) {
-                // Supongamos que tomas la primera tarea encontrada
-                String taskId = String.valueOf(tasks.get(0).get("name"));
-                System.out.println("Task Name for Process ID " + processId + ": " + taskId);
-                return taskId;
+                // Supongamos que tomamos la primera tarea encontrada
+                Map<String, String> taskInfo = new HashMap<>();
+                taskInfo.put("taskId", String.valueOf(tasks.get(0).get("id")));
+                taskInfo.put("taskName", String.valueOf(tasks.get(0).get("name")));
+                //taskInfo.put("assignee", String.valueOf(tasks.get(0).get("assignee")));
+
+                System.out.println("Task Info for Process ID " + processId + ":");
+                System.out.println("Task ID: " + taskInfo.get("taskId"));
+                System.out.println("Task Name: " + taskInfo.get("taskName"));
+                //System.out.println("Assignee: " + taskInfo.get("assignee"));
+
+                return taskInfo;
             } else {
                 System.err.println("No tasks found for Process ID " + processId);
                 return null;
@@ -86,27 +99,44 @@ public class ProcessService {
         }
     }
 
-    public String completeTask(String taskId) {
-        // Construir el cuerpo de la solicitud para Camunda
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+    public String completeTask(String processId) {
+        // Obtener la información de la tarea a partir del Process ID
+        Map<String, String> taskInfo = getTaskInfoByProcessId(processId);
 
-        // Crear el cuerpo de la solicitud (sin variables)
-        Map<String, Object> requestBody = new HashMap<>();
+        if (taskInfo != null) {
+            // Extraer el Task ID de la información de la tarea
+            String taskId = taskInfo.get("taskId");
+            System.out.println("este es el taskid a completar: "+taskId);
 
-        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
+            // Construir el cuerpo de la solicitud para Camunda
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
 
-        // Realizar la solicitud POST a Camunda
-        String camundaUrl = "http://localhost:9000/engine-rest/task/" + taskId + "/complete";
-        try {
+            // Crear el cuerpo de la solicitud (sin variables)
+            Map<String, Object> requestBody = new HashMap<>();
+
+            HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
+
             // Realizar la solicitud POST a Camunda
-            ResponseEntity<Map> response = restTemplate.postForEntity(camundaUrl, requestEntity, Map.class);
-            String processId = String.valueOf(response.getBody().get("id"));
-            System.out.println("Task completed: " + processId);
-            return processId;
-        } catch (HttpClientErrorException e) {
-            String errorMessage = e.getResponseBodyAsString();
-            System.err.println("Error en la solicitud a Camunda: " + errorMessage);
+            String camundaUrl = "http://localhost:9000/engine-rest/task/" + taskId + "/complete";
+            try {
+                // Realizar la solicitud POST a Camunda
+                ResponseEntity<Map> response = restTemplate.postForEntity(camundaUrl, requestEntity, Map.class);
+                CreditRequest creditRequest = creditRequestService.getCreditRequestByProcessId(processId);
+                System.out.println(creditRequest.getCodRequest());
+                creditRequest.setStatus(taskInfo.get("taskName"));
+                creditRequestService.updateCreditRequest(creditRequest.getCodRequest(),creditRequest);
+                //System.out.println("process id new: "+response.getBody().get("id"));
+                //String completedTaskId = String.valueOf(response.getBody().get("id"));
+                //System.out.println("Task completed: " + completedTaskId);
+                return String.valueOf(creditRequest.getApplicantCouple().getId());
+            } catch (HttpClientErrorException e) {
+                String errorMessage = e.getResponseBodyAsString();
+                System.err.println("Error en la solicitud a Camunda: " + errorMessage);
+                return null;
+            }
+        } else {
+            System.err.println("No se pudo obtener información de la tarea para Process ID " + processId);
             return null;
         }
     }

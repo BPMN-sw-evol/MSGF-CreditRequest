@@ -25,9 +25,9 @@ public class ProcessController {
         return "redirect:/view-credit";
     }
 
-
     @GetMapping("/complete")
     public String completeTask(@RequestParam(name = "taskId") String taskId) {
-        return this.processService.completeTask(taskId);
+        String resultado = this.processService.completeTask(taskId);
+        return "redirect:/view-credit?coupleId="+resultado;
     }
 }
