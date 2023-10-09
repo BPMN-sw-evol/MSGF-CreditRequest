@@ -25,8 +25,35 @@ function enviarFilaConEstadoDraft() {
             // Enviar el formulario
             form.submit();
 
+            // Marcar que se envió el formulario
+            formularioEnviado = true;
+
+
             break; // Detener la iteración después de enviar la fila
         }
+    }
+
+    // Mostrar la alerta de éxito o error después de enviar el formulario
+    if (formularioEnviado) {
+        // Muestra la alerta de éxito
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Success!',
+            text: 'The application has been sent successfully',
+            showConfirmButton: false,
+            timer: 1500
+        });
+    } else {
+        // Muestra la alerta de error
+        Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: 'Error!',
+            text: 'Please try to send the application again',
+            showConfirmButton: false,
+            timer: 1500
+        });
     }
 
 }

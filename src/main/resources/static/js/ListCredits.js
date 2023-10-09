@@ -8,9 +8,12 @@ $(document).ready(function() {
     if (status === "DRAFT") {
         // Mostrar el botón si el estado es DRAFT
         $("#editCredit").show();
+        $("#confirmRequest").show();
+
     } else {
         // Ocultar el botón si el estado no es DRAFT
         $("#editCredit").hide();
+        $("#confirmRequest").hide();
     }
 });
 
