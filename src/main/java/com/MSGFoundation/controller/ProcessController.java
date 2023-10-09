@@ -22,12 +22,12 @@ public class ProcessController {
     @PostMapping("/startProcess")
     public String startProcessInstance(@ModelAttribute CreditInfoDTO creditInfoDTO) {
         this.processService.startProcessInstance(creditInfoDTO);
-        return "redirect:/view-credit"; // Redirige a la URL del método view-credit
+        return "redirect:/view-credit";
     }
 
 
     @GetMapping("/complete")
-    public String completeTask(String taskId, boolean isValid) {
-        return this.processService.completeTask(taskId,isValid);
+    public String completeTask(@ModelAttribute String taskId) {
+        return this.processService.completeTask(taskId);
     }
 }

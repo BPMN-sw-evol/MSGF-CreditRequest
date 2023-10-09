@@ -1,10 +1,8 @@
 package com.MSGFoundation.controller;
 
-import com.MSGFoundation.dto.CreditInfoDTO;
 import com.MSGFoundation.model.Couple;
 import com.MSGFoundation.model.CreditRequest;
 import com.MSGFoundation.model.Person;
-import com.MSGFoundation.util.RequestStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

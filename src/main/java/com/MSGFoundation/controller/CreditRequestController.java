@@ -5,6 +5,7 @@ import com.MSGFoundation.model.Couple;
 import com.MSGFoundation.model.CreditRequest;
 import com.MSGFoundation.model.Person;
 import com.MSGFoundation.service.CreditRequestService;
+import com.MSGFoundation.service.ProcessService;
 import com.MSGFoundation.util.RequestStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,19 +23,18 @@ public class CreditRequestController {
     private final CreditRequestService creditRequestService;
     private final CoupleController coupleController;
     private final PersonController personController;
-    private final ProcessController processController;
+    private final ProcessService processService;
+
+    @Autowired
+    public CreditRequestController(CreditRequestService creditRequestService, CoupleController coupleController, PersonController personController, ProcessService processService){        this.creditRequestService = creditRequestService;
+        this.coupleController = coupleController;
+        this.personController = personController;
+        this.processService = processService;
+    }
 
     @GetMapping("/")
     public List<CreditRequest> getAllCreditRequest(){
         return creditRequestService.getAllCreditRequest();
-    }
-
-    @Autowired
-    public CreditRequestController(CreditRequestService creditRequestService, CoupleController coupleController, PersonController personController, ProcessController processController){
-        this.creditRequestService = creditRequestService;
-        this.coupleController = coupleController;
-        this.personController = personController;
-        this.processController = processController;
     }
 
     @GetMapping("/{coupleId}")
@@ -72,15 +72,17 @@ public class CreditRequestController {
         redirectAttributes.addAttribute("coupleId",coupleId);
 
         creditRequestService.createCreditRequest(creditRequest);
-        //String processId = processController.startProcessInstance(creditInfoDTO);
-//        List<CreditRequest> updateCredit = creditRequestService.findCreditByCouple(couple);
-//        for (CreditRequest request : updateCredit) {
-//            if ("DRAFT".equals(request.getStatus())) {
-//                System.out.println("Solicitud en estado draft: " + request.getCodRequest());
-//                request.setProcessId(processId);
-//                creditRequestService.updateCreditRequest(request.getCodRequest(), request);
-//            }
-//        }
+        String processId = processService.startProcessInstance(creditInfoDTO);
+        //String taskName = processService.getTaskNameByProcessId(processId);
+        List<CreditRequest> updateCredit = creditRequestService.findCreditByCouple(couple);
+        for (CreditRequest request : updateCredit) {
+            if ("DRAFT".equals(request.getStatus())) {
+                System.out.println("Solicitud en estado draft: " + request.getCodRequest());
+                request.setProcessId(processId);
+                //request.setStatus(taskName);
+                creditRequestService.updateCreditRequest(request.getCodRequest(), request);
+            }
+        }
         return new RedirectView("/view-credit");
     }
 
