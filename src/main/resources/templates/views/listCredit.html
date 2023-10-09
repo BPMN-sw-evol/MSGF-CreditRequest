@@ -31,7 +31,7 @@
 
                 </div>
                 <div class="card-body">
-                    <form action="/startProcess" th:object="${creditInfo}" method="post">
+                    <form action="/complete" method="get">
                         <table class="table table-striped" id="creditTable">
                             <thead>
                             <tr>
@@ -39,7 +39,6 @@
                                 <th scope="col">House Price</th>
                                 <th scope="col">Quota Value</th>
                                 <th scope="col">Request Date</th>
-                                <th scope="col">Marry Saving</th>
                                 <th scope="col">State</th>
                             </tr>
                             </thead>
@@ -49,25 +48,13 @@
                                 <td><span th:text="${creditRequest.housePrices}"></span></td>
                                 <td><span th:text="${creditRequest.quotaValue}"></span></td>
                                 <td><span th:text="${creditRequest.requestDate}"></span></td>
-                                <td type="hidden"><span th:text="${creditRequest.coupleSavings}"></span></td>
                                 <td><span th:text="${creditRequest.status}"></span></td>
-
                             </tr>
                             </tbody>
                         </table>
-                        <input type="hidden" name="coupleSavings" th:value="${creditInfo[0].coupleSavings}">
-                        <input type="hidden" name="applicantCoupleId" th:value="${creditInfo[0].applicantCouple.getId()}">
-                        <input type="hidden" name="marriageYears" th:value="${creditInfo[0].marriageYears}">
-                        <input type="hidden" name="bothEmployees" th:value="${creditInfo[0].bothEmployees}">
-                        <input type="hidden" name="processId" id="processId" />
-                        <input type="hidden" name="housePrices" id="housePrices" />
-                        <input type="hidden" name="quotaValue" id="quotaValue" />
-                        <input type="hidden" name="requestDate" id="requestDate" />
-                        <input type="hidden" name="status" id="status" />
-                        <input type="hidden" name="coupleSavings" id="coupleSavings">
-                        <input type="hidden" name="applicantCoupleId" id="applicantCoupleId">
-                        <input type="hidden" name="marriageYears" id="marriageYears">
-                        <input type="hidden" name="bothEmployees" id="bothEmployees">
+
+                        <input type="hidden" name="taskId" id="taskId" />
+
                         <div class="text-center">
                             <button id="cualquiernombre" class="btn btn-danger" type="submit" onclick="enviarFilaConEstadoDraft()">Confirmar solicitud</button>
                         </div>

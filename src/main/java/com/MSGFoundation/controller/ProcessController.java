@@ -27,7 +27,7 @@ public class ProcessController {
 
 
     @GetMapping("/complete")
-    public String completeTask(@ModelAttribute String taskId) {
+    public String completeTask(@RequestParam(name = "taskId") String taskId) {
         return this.processService.completeTask(taskId);
     }
 }
