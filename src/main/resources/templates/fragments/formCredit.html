@@ -8,24 +8,33 @@
         <div class="card-body">
             <div class="form-floating mb-3 p-1">
                 <input class="form-control" id="id1" type="text" name="people[0].id"
-                       placeholder="Enter your personal ID" th:value="${people[0].getId()}" required onblur="validateDNI(this)"
-                       th:attr="disabled=${people[0].getId() != null}">
+                       placeholder="Enter your personal ID" th:value="${people[0].getId()}"
+                       required onblur="validateDNI(this)"
+                       >
+<!--                th:attr="disabled=${people[0].getId() != null}"-->
                 <label for="id1"> DNI: </label>
             </div>
             <div class="form-floating mb-3 p-1">
                 <input class="form-control" id="fullname1" type="text" name="people[0].fullname"
-                       placeholder="Enter your fullname" th:value="${people[0].getFullname()}" required onblur="validateFullName(this)">
+                       placeholder="Enter your fullname" th:value="${people[0].getFullname() != null  ? people[0].getFullname() : 'maria roa'}" required onblur="validateFullName(this)">
                 <label for="fullname1"> FullName: </label>
             </div>
             <div class="form-floating mb-3 p-1">
                 <input class="form-control" id="email1" type="email" name="people[0].email"
-                       placeholder="Enter your email" th:value="${people[0].getEmail()}" required onblur="validateEmail(this)">
+                       placeholder="Enter your email" th:value="${people[0].getEmail() != null ? people[0].getEmail() : 'prueba1@gmail.com'}" required onblur="validateEmail(this)">
                 <label for="email1"> E-Mail: </label>
             </div>
             <div class="form-floating mb-3 p-1">
+
+<!--                <select class="form-select" id="gender2" name="people[1].gender" required onblur="validateGender(this)">-->
+<!--                <option value="" th:selected="${people[1].getGender() == null or people[1].getGender() == ''}" disabled>Select your gender</option>-->
+<!--                <option value="Male" th:selected="${people[1].getGender() == 'Male'}">Male</option>-->
+<!--                <option value="Woman" th:selected="${people[1].getGender() == 'Woman'}">Woman</option>-->
+<!--            </select>-->
+
                 <select class="form-select" id="gender1" name="people[0].gender" required onblur="validateGender(this)">
-                    <option value="" th:selected="${people[0].getGender() == null or people[0].getGender() == ''}" disabled>Select your gender</option>
-                    <option value="Male" th:selected="${people[0].getGender() != null and people[0].getGender() == 'Male'}">Male</option>
+                    <option value="" th:selected="${people[0].getGender() == null or people[0].getGender() == 'Woman'}" disabled>Select your gender</option>
+                    <option value="Male" th:selected="${people[0].getGender() == null or people[0].getGender() == 'Male'}">Male</option>
                     <option value="Woman" th:selected="${people[0].getGender() != null and people[0].getGender() == 'Woman'}">Woman</option>
                 </select>
                 <label for="gender1">Gender:</label>
@@ -33,13 +42,13 @@
 
             <div class="form-floating mb-3 p-1">
                 <input class="form-control" id="birthDate1" type="date" name="people[0].birthDate"
-                       placeholder="Enter your birth date" th:value="${people[0].getBirthDate()}" required
+                       placeholder="Enter your birth date" th:value="${people[0].getBirthDate() != null ? people[0].getBirthDate() : '2001-07-23'}" required
                        onblur="validateBirthDate(this)">
                 <label for="birthDate1"> Birth Date: </label>
             </div>
             <div class="form-floating mb-3 p-1">
                 <input class="form-control" id="phoneNumber1" type="text"
-                       name="people[0].phoneNumber" th:value="${people[0].getPhoneNumber()}" placeholder="Enter your phone number"
+                       name="people[0].phoneNumber" th:value="${people[0].getPhoneNumber() != null ? people[0].getPhoneNumber() : '3155677654'}" placeholder="Enter your phone number"
                        pattern="[0-9]{10}" required onblur="validatePhoneNumber(this)">
                 <label for="phoneNumber1"> Phone Number: </label>
             </div>
@@ -55,37 +64,39 @@
             <div class="form-floating mb-3 p-1">
                 <input class="form-control" id="id2" type="text" name="people[1].id"
                        placeholder="Enter your personal ID" th:value="${people[1].getId()}" required onblur="validateDNI(this)"
-                       th:attr="disabled=${people[1].getId() != null}">
+                       >
+<!--                th:attr="disabled=${people[1].getId() != null}"-->
                 <label for="id2"> DNI: </label>
             </div>
             <div class="form-floating mb-3 p-1">
                 <input class="form-control" id="fullname2" type="text" name="people[1].fullname"
-                       placeholder="Enter fullname" th:value="${people[1].getFullname()}" required onblur="validateFullName(this)">
+                       placeholder="Enter fullname" th:value="${people[1].getFullname() != null ? people[1].getFullname() : 'carlos alberto'}" required onblur="validateFullName(this)">
                 <label for="fullname2"> FullName: </label>
             </div>
             <div class="form-floating mb-3 p-1">
                 <input class="form-control" id="email2" type="email" name="people[1].email"
-                       placeholder="Enter your email" th:value="${people[1].getEmail()}" required onblur="validateEmail(this)">
+                       placeholder="Enter your email" th:value="${people[1].getEmail() != null ? people[1].getEmail() : 'prueba@gmail.com'}" required onblur="validateEmail(this)">
                 <label for="email2"> E-Mail: </label>
             </div>
             <div class="form-floating mb-3 p-1">
                 <select class="form-select" id="gender2" name="people[1].gender" required onblur="validateGender(this)">
                     <option value="" th:selected="${people[1].getGender() == null or people[1].getGender() == ''}" disabled>Select your gender</option>
                     <option value="Male" th:selected="${people[1].getGender() == 'Male'}">Male</option>
-                    <option value="Woman" th:selected="${people[1].getGender() == 'Woman'}">Woman</option>
+                    <option value="Woman" th:selected="${people[1].getGender() == null or people[1].getGender() == 'Woman'}">Woman</option>
                 </select>
                 <label for="gender2">Gender:</label>
             </div>
 
             <div class="form-floating mb-3 p-1">
                 <input class="form-control" id="birthDate2" type="date" name="people[1].birthDate"
-                       placeholder="Enter your birth date" required th:value="${people[1].getBirthDate()}"
+                       placeholder="Enter your birth date" required th:value="${people[1].getBirthDate() != null ? people[1].getBirthDate() : '2000-01-20'}"
                        onblur="validateBirthDate(this)">
                 <label for="birthDate2"> Birth Date: </label>
             </div>
             <div class="form-floating mb-3 p-1">
                 <input class="form-control" id="phoneNumber2" type="text"
-                       name="people[1].phoneNumber" th:value="${people[1].getPhoneNumber()}" placeholder="Enter your phone number"
+                       name="people[1].phoneNumber" th:value="${people[1].getPhoneNumber() != null ? people[1].getPhoneNumber() : '3113777347'}"
+                       placeholder="Enter your phone number"
                        pattern="[0-9]{10}" required onblur="validatePhoneNumber(this)">
                 <label for="phoneNumber2"> Phone Number: </label>
             </div>
@@ -102,15 +113,15 @@
         <input class="form-control" type="number" id="marriageYears" min="1" max="10"
                name="marriageYears"
                placeholder="Enter years of marriage"
-               th:value="${creditInfo != null and creditInfo.size() > 0 ? creditInfo[0].marriageYears : ''}"
+               th:value="${creditInfo != null and creditInfo.size() > 0 ? creditInfo[0].marriageYears : '5'}"
                onblur="validateMarriageYears(this)">
         <label for="marriageYears">Years of Marriage:</label>
     </div>
     <div class="form-floating mb-3 p-1">
         <select class="form-select" id="bothEmployees" name="bothEmployees" required
                 onblur="validatebothEmployees(this)">
-            <option value="" th:selected="${creditInfo != null and creditInfo.size() > 0 ? creditInfo[0].bothEmployees == null : true}" disabled selected>Both are employed?</option>
-            <option value="Yes" th:selected="${creditInfo != null and creditInfo.size() > 0? creditInfo[0].bothEmployees == true : false}">Yes</option>
+            <option value="" th:selected="${creditInfo != null and creditInfo.size() > 0 ? creditInfo[0].bothEmployees == null : false}" disabled selected>Both are employed?</option>
+            <option value="Yes" th:selected="${creditInfo != null and creditInfo.size() > 0? creditInfo[0].bothEmployees == true : true}">Yes</option>
             <option value="No" th:selected="${creditInfo != null and creditInfo.size() > 0 ? creditInfo[0].bothEmployees == false : false}">No</option>
         </select>
         <label for="bothEmployees">Both Employed:</label>
@@ -119,7 +130,7 @@
         <input class="form-control" type="number" id="housePrices" min="0" step="100000"
                name="housePrices"
                placeholder="Enter house prices" required onblur="validateHousePrices(this)"
-               th:value="${creditInfo != null and creditInfo.size() > 0 ? creditInfo[0].housePrices :''}"
+               th:value="${creditInfo != null and creditInfo.size() > 0 ? creditInfo[0].housePrices :'1000000'}"
                oninput="updateCoupleSavingsMax()">
         <label for="housePrices">House Prices:</label>
     </div>
@@ -127,14 +138,14 @@
         <input class="form-control" type="number" id="quotaValue" min="10000" step="10000"
                name="quotaValue"
                placeholder="Enter quota value" required onblur="validateQuotaValue(this)"
-               th:value="${creditInfo != null and creditInfo.size() > 0 ? creditInfo[0].quotaValue: ''}">
+               th:value="${creditInfo != null and creditInfo.size() > 0 ? creditInfo[0].quotaValue: '200000'}">
         <label for="quotaValue">Quota Value:</label>
     </div>
     <div class="form-floating mb-3 p-1">
         <input class="form-control" type="number" id="coupleSavings" min="0"
                name="coupleSavings"
                placeholder="Enter couple savings" required onblur="validateCoupleSavings(this)"
-               th:value="${creditInfo != null and creditInfo.size() > 0 ? creditInfo[0].coupleSavings:''}">
+               th:value="${creditInfo != null and creditInfo.size() > 0 ? creditInfo[0].coupleSavings:'100000'}">
         <label for="coupleSavings">Couple Savings:</label>
     </div>
 </div>

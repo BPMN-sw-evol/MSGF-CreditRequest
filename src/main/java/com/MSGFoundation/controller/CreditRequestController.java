@@ -92,7 +92,7 @@ public class CreditRequestController {
 
         System.out.println("esto es el id: "+creditInfoDTO.getApplicantCoupleId());
         List<Person> people = creditInfoDTO.getPeople();
-        System.out.println(people.get(0).toString());
+        System.out.println(creditInfoDTO.toString());
         personController.updatePerson(people.get(0).getId(),people.get(0));
         personController.updatePerson(people.get(1).getId(),people.get(1));
         Long id = 1L;
