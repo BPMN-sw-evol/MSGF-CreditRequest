@@ -3,6 +3,7 @@ package com.MSGFoundation.dto;
 import com.MSGFoundation.model.Person;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -16,4 +17,5 @@ public class CreditInfoDTO {
     private Long quotaValue;
     private Long coupleSavings;
     private String status;
+    private LocalDateTime requestDate;
 }
