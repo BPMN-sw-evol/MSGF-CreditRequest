@@ -42,7 +42,7 @@ function enviarFilaConEstadoDraft() {
             title: 'Success!',
             text: 'The application has been sent successfully',
             showConfirmButton: false,
-            timer: 1500
+            timer: 4500
         });
     } else {
         // Muestra la alerta de error
@@ -52,7 +52,7 @@ function enviarFilaConEstadoDraft() {
             title: 'Error!',
             text: 'Please try to send the application again',
             showConfirmButton: false,
-            timer: 1500
+            timer: 4500
         });
     }
 

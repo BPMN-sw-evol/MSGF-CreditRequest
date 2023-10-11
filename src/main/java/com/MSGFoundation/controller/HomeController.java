@@ -34,9 +34,13 @@ public class HomeController {
     @GetMapping("/register-credit")
     public String registerFormView(Model model){
         List<Person> people = new ArrayList<>();
+        List<CreditRequest> creditInfo = new ArrayList<>();
+
         people.add(new Person());
         people.add(new Person());
+        System.out.println("aqui estoy: "+creditInfo.toString());
         model.addAttribute("people",people);
+        model.addAttribute("creditInfo",creditInfo);
 
         return "views/creditForm";
     }
@@ -58,10 +62,8 @@ public class HomeController {
         List<Person> people = new ArrayList<>();
         people.add(partner1);
         people.add(partner2);
-
         model.addAttribute("people",people);
         model.addAttribute("creditInfo",creditInfo);
-
 
         return "views/listCredit";
     }

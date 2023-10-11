@@ -64,7 +64,7 @@ public class CreditRequestController {
         creditRequest.setStatus(RequestStatus.DRAFT.toString());
         LocalDateTime currentDate = LocalDateTime.now();
         creditRequest.setRequestDate(currentDate);
-
+        System.out.println("aqui estoy: "+creditInfoDTO.getBothEmployees());
         Long coupleId = coupleController.getCouplebyIds(partner1.getId(), partner2.getId()).getBody();
         Couple couple = coupleController.getCoupleById(coupleId);
         creditRequest.setApplicantCouple(couple);
@@ -88,7 +88,7 @@ public class CreditRequestController {
     }
 
     @PostMapping("/update")
-    public CreditRequest updateCreditRequest(@ModelAttribute("creditInfoDTO") CreditInfoDTO creditInfoDTO){
+    public RedirectView updateCreditRequest(@ModelAttribute("creditInfoDTO") CreditInfoDTO creditInfoDTO){
 
         System.out.println("esto es el id: "+creditInfoDTO.getApplicantCoupleId());
         List<Person> people = creditInfoDTO.getPeople();
@@ -103,7 +103,9 @@ public class CreditRequestController {
         creditRequest.setQuotaValue(creditInfoDTO.getQuotaValue());
         creditRequest.setCoupleSavings(creditInfoDTO.getCoupleSavings());
 
-        return creditRequestService.updateCreditRequest(id, creditRequest);
+        creditRequestService.updateCreditRequest(id, creditRequest);
+
+        return new RedirectView("/view-credit");
     }
 
     @DeleteMapping("/delete/{id}")

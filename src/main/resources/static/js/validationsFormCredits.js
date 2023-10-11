@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById('personForm'); // Reemplaza 'personForm' con el ID de tu formulario
 
 // Obtén todos los elementos input dentro del formulario
-    const inputElements = form.querySelectorAll('input');
+    const inputElements = form.querySelectorAll('input, select');
 
 // Itera a través de los elementos input
     inputElements.forEach((inputElement) => {
@@ -235,7 +235,7 @@ function validateFormField(form) {
             title: 'success!',
             text: 'the couple has been successfully registered',
             showConfirmButton: false,
-            timer: 1500
+            timer: 4500
         })
         return true; // Envía el formulario si todos los campos son válidos
     } else {
@@ -246,7 +246,7 @@ function validateFormField(form) {
             title: 'Error!',
             text: 'please enter correct information',
             showConfirmButton: false,
-            timer: 1500
+            timer: 4500
         })
         return false; // Evita el envío del formulario
     }

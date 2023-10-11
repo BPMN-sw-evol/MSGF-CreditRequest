@@ -1,4 +1,4 @@
-<div class="card-body d-flex">
+<div class="card-body d-flex" th:if="${people != null}">
     <div class="card col-md-6">
         <div class="card-header">
             <div class="card-title">
@@ -39,7 +39,7 @@
             </div>
             <div class="form-floating mb-3 p-1">
                 <input class="form-control" id="phoneNumber1" type="text"
-                       name="people[0].phoneNumber" th:value="${people[0].getPhoneNumber}" placeholder="Enter your phone number"
+                       name="people[0].phoneNumber" th:value="${people[0].getPhoneNumber()}" placeholder="Enter your phone number"
                        pattern="[0-9]{10}" required onblur="validatePhoneNumber(this)">
                 <label for="phoneNumber1"> Phone Number: </label>
             </div>
@@ -97,20 +97,21 @@
         <h1 class="text-center">Credit Information</h1>
     </div>
 </div>
-<div class="card-body">
+<div class="card-body" th:if="${creditInfo != null}">
     <div class="form-floating mb-3 p-1">
         <input class="form-control" type="number" id="marriageYears" min="1" max="10"
                name="marriageYears"
                placeholder="Enter years of marriage"
+               th:value="${creditInfo != null and creditInfo.size() > 0 ? creditInfo[0].marriageYears : ''}"
                onblur="validateMarriageYears(this)">
         <label for="marriageYears">Years of Marriage:</label>
     </div>
     <div class="form-floating mb-3 p-1">
         <select class="form-select" id="bothEmployees" name="bothEmployees" required
                 onblur="validatebothEmployees(this)">
-            <option value="" disabled selected>Both are employed?</option>
-            <option value="Yes">Yes</option>
-            <option value="No">No</option>
+            <option value="" th:selected="${creditInfo != null and creditInfo.size() > 0 ? creditInfo[0].bothEmployees == null : true}" disabled selected>Both are employed?</option>
+            <option value="Yes" th:selected="${creditInfo != null and creditInfo.size() > 0? creditInfo[0].bothEmployees == true : false}">Yes</option>
+            <option value="No" th:selected="${creditInfo != null and creditInfo.size() > 0 ? creditInfo[0].bothEmployees == false : false}">No</option>
         </select>
         <label for="bothEmployees">Both Employed:</label>
     </div>
@@ -118,19 +119,22 @@
         <input class="form-control" type="number" id="housePrices" min="0" step="100000"
                name="housePrices"
                placeholder="Enter house prices" required onblur="validateHousePrices(this)"
+               th:value="${creditInfo != null and creditInfo.size() > 0 ? creditInfo[0].housePrices :''}"
                oninput="updateCoupleSavingsMax()">
         <label for="housePrices">House Prices:</label>
     </div>
     <div class="form-floating mb-3 p-1">
         <input class="form-control" type="number" id="quotaValue" min="10000" step="10000"
                name="quotaValue"
-               placeholder="Enter quota value" required onblur="validateQuotaValue(this)">
+               placeholder="Enter quota value" required onblur="validateQuotaValue(this)"
+               th:value="${creditInfo != null and creditInfo.size() > 0 ? creditInfo[0].quotaValue: ''}">
         <label for="quotaValue">Quota Value:</label>
     </div>
     <div class="form-floating mb-3 p-1">
         <input class="form-control" type="number" id="coupleSavings" min="0"
                name="coupleSavings"
-               placeholder="Enter couple savings" required onblur="validateCoupleSavings(this)">
+               placeholder="Enter couple savings" required onblur="validateCoupleSavings(this)"
+               th:value="${creditInfo != null and creditInfo.size() > 0 ? creditInfo[0].coupleSavings:''}">
         <label for="coupleSavings">Couple Savings:</label>
     </div>
 </div>
