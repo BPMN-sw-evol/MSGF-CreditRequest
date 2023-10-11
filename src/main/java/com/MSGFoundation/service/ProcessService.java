@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,12 +43,10 @@ public class ProcessService {
         Map<String, Object> variables = new HashMap<>();
         variables.put("marriageYears", Map.of("value", creditInfoDTO.getMarriageYears(), "type", "Long"));
         variables.put("bothEmployees", Map.of("value", creditInfoDTO.getBothEmployees(), "type", "Boolean"));
-        variables.put("housePrices", Map.of("value", creditInfoDTO.getHousePrices(), "type", "Long"));
-        variables.put("quotaValue", Map.of("value", creditInfoDTO.getQuotaValue(), "type", "Long"));
-        variables.put("coupleSavings", Map.of("value", creditInfoDTO.getCoupleSavings(), "type", "Long"));
         variables.put("applicantCouple", Map.of("value", creditInfoDTO.getApplicantCoupleId(), "type", "Long"));
         variables.put("coupleName1", Map.of("value", coupleName1, "type", "String"));
         variables.put("coupleName2", Map.of("value", coupleName2, "type", "String"));
+        variables.put("creationDate", Map.of("value", String.valueOf(creditInfoDTO.getRequestDate()),"type","String"));
 
         // Crear el cuerpo de la solicitud
         Map<String, Object> requestBody = new HashMap<>();
@@ -124,7 +123,9 @@ public class ProcessService {
                 ResponseEntity<Map> response = restTemplate.postForEntity(camundaUrl, requestEntity, Map.class);
                 CreditRequest creditRequest = creditRequestService.getCreditRequestByProcessId(processId);
                 System.out.println(creditRequest.getCodRequest());
-                creditRequest.setStatus(taskInfo.get("taskName"));
+                creditRequest.setStatus("Revisar información pareja");
+                LocalDateTime currentDate = LocalDateTime.now();
+                creditRequest.setRequestDate(currentDate);
                 creditRequestService.updateCreditRequest(creditRequest.getCodRequest(),creditRequest);
                 //System.out.println("process id new: "+response.getBody().get("id"));
                 //String completedTaskId = String.valueOf(response.getBody().get("id"));

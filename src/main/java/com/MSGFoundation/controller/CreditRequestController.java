@@ -69,6 +69,7 @@ public class CreditRequestController {
         Couple couple = coupleController.getCoupleById(coupleId);
         creditRequest.setApplicantCouple(couple);
         creditInfoDTO.setApplicantCoupleId(coupleId);
+        creditInfoDTO.setRequestDate(currentDate);
         redirectAttributes.addAttribute("coupleId",coupleId);
 
         creditRequestService.createCreditRequest(creditRequest);
