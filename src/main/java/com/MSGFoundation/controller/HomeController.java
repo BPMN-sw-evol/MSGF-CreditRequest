@@ -38,7 +38,7 @@ public class HomeController {
 
         people.add(new Person());
         people.add(new Person());
-        System.out.println("aqui estoy: "+creditInfo.toString());
+
         model.addAttribute("people",people);
         model.addAttribute("creditInfo",creditInfo);
 

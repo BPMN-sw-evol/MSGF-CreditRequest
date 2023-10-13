@@ -57,10 +57,33 @@ public class ProcessService {
         try {
             // Realizar la solicitud POST a Camunda
             ResponseEntity<Map> response = restTemplate.postForEntity(camundaStartUrl, requestEntity, Map.class);
-            return String.valueOf(response.getBody().get("id"));
+            String processId = String.valueOf(response.getBody().get("id"));
+            String taskId = getTaskIdByProcessId(processId);
+            setAssignee(taskId,"MarriedCouple");
+            return processId;
         } catch (HttpClientErrorException e) {
             String errorMessage = e.getResponseBodyAsString();
             return null;
+        }
+    }
+
+    public void setAssignee(String taskId, String userId) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("userId", userId);
+
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
+
+        String camundaUrl = "http://localhost:9000/engine-rest/task/" + taskId + "/assignee";
+
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(camundaUrl, HttpMethod.POST, requestEntity, String.class);
+            System.out.println("Assignee set successfully");
+        } catch (HttpClientErrorException e) {
+            String errorMessage = e.getResponseBodyAsString();
+            System.err.println("Error in the Camunda request: " + errorMessage);
         }
     }
 
@@ -98,6 +121,24 @@ public class ProcessService {
         }
     }
 
+    public String getTaskIdByProcessId(String processId) {
+        Map<String, String> taskInfo = getTaskInfoByProcessId(processId);
+        if (taskInfo != null) {
+            return taskInfo.get("taskId");
+        } else {
+            return null;
+        }
+    }
+
+    public String getTaskNameByProcessId(String processId) {
+        Map<String, String> taskInfo = getTaskInfoByProcessId(processId);
+        if (taskInfo != null) {
+            return taskInfo.get("taskName");
+        } else {
+            return null;
+        }
+    }
+
     public String completeTask(String processId) {
         // Obtener la información de la tarea a partir del Process ID
         Map<String, String> taskInfo = getTaskInfoByProcessId(processId);
@@ -121,15 +162,15 @@ public class ProcessService {
             try {
                 // Realizar la solicitud POST a Camunda
                 ResponseEntity<Map> response = restTemplate.postForEntity(camundaUrl, requestEntity, Map.class);
+                String taskId1 = getTaskIdByProcessId(processId);
+                setAssignee(taskId1,"CreditAnalyst");
                 CreditRequest creditRequest = creditRequestService.getCreditRequestByProcessId(processId);
                 System.out.println(creditRequest.getCodRequest());
-                creditRequest.setStatus("Revisar información pareja");
+                String taskName = getTaskNameByProcessId(creditRequest.getProcessId());
+                creditRequest.setStatus(taskName);
                 LocalDateTime currentDate = LocalDateTime.now();
                 creditRequest.setRequestDate(currentDate);
                 creditRequestService.updateCreditRequest(creditRequest.getCodRequest(),creditRequest);
-                //System.out.println("process id new: "+response.getBody().get("id"));
-                //String completedTaskId = String.valueOf(response.getBody().get("id"));
-                //System.out.println("Task completed: " + completedTaskId);
                 return String.valueOf(creditRequest.getApplicantCouple().getId());
             } catch (HttpClientErrorException e) {
                 String errorMessage = e.getResponseBodyAsString();
