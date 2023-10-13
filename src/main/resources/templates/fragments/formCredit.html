@@ -10,8 +10,7 @@
                 <input class="form-control" id="id1" type="text" name="people[0].id"
                        placeholder="Enter your personal ID" th:value="${people[0].getId()}"
                        required onblur="validateDNI(this)"
-                       >
-<!--                th:attr="disabled=${people[0].getId() != null}"-->
+                       th:attr="readonly=${people[0].getId() != null}">
                 <label for="id1"> DNI: </label>
             </div>
             <div class="form-floating mb-3 p-1">
@@ -64,8 +63,7 @@
             <div class="form-floating mb-3 p-1">
                 <input class="form-control" id="id2" type="text" name="people[1].id"
                        placeholder="Enter your personal ID" th:value="${people[1].getId()}" required onblur="validateDNI(this)"
-                       >
-<!--                th:attr="disabled=${people[1].getId() != null}"-->
+                       th:attr="readonly=${people[1].getId() != null}">
                 <label for="id2"> DNI: </label>
             </div>
             <div class="form-floating mb-3 p-1">

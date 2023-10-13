@@ -91,19 +91,30 @@ public class CreditRequestController {
     public RedirectView updateCreditRequest(@ModelAttribute("creditInfoDTO") CreditInfoDTO creditInfoDTO){
 
         System.out.println("esto es el id: "+creditInfoDTO.getApplicantCoupleId());
+
         List<Person> people = creditInfoDTO.getPeople();
         System.out.println(creditInfoDTO.toString());
         personController.updatePerson(people.get(0).getId(),people.get(0));
         personController.updatePerson(people.get(1).getId(),people.get(1));
-        Long id = 1L;
+
+        Long coupleId = coupleController.getCouplebyIds(people.get(0).getId(), people.get(1).getId()).getBody();
+        Couple couple = coupleController.getCoupleById(coupleId);
+        List<CreditRequest> creditId = creditRequestService.findCreditByCouple(couple);
+
         CreditRequest creditRequest = new CreditRequest();
         creditRequest.setMarriageYears(creditInfoDTO.getMarriageYears());
         creditRequest.setBothEmployees(creditInfoDTO.getBothEmployees());
         creditRequest.setHousePrices(creditInfoDTO.getHousePrices());
         creditRequest.setQuotaValue(creditInfoDTO.getQuotaValue());
         creditRequest.setCoupleSavings(creditInfoDTO.getCoupleSavings());
+        creditRequest.setApplicantCouple(couple);
+        creditRequest.setStatus(RequestStatus.DRAFT.toString());
+        LocalDateTime currentDate = LocalDateTime.now();
+        creditRequest.setRequestDate(currentDate);
+        creditRequest.setProcessId(creditId.get(0).getProcessId());
 
-        creditRequestService.updateCreditRequest(id, creditRequest);
+        System.out.println("aqui estoy: "+creditId.get(0).getCodRequest());
+        creditRequestService.updateCreditRequest(creditId.get(0).getCodRequest(), creditRequest);
 
         return new RedirectView("/view-credit");
     }
