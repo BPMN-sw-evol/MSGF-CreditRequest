@@ -41,6 +41,7 @@ public class ProcessService {
 
         // Crear un mapa para los atributos que deseas enviar
         Map<String, Object> variables = new HashMap<>();
+        variables.put("codRequest",Map.of("value", creditInfoDTO.getCodRequest(), "type", "Long"));
         variables.put("marriageYears", Map.of("value", creditInfoDTO.getMarriageYears(), "type", "Long"));
         variables.put("bothEmployees", Map.of("value", creditInfoDTO.getBothEmployees(), "type", "Boolean"));
         variables.put("applicantCouple", Map.of("value", creditInfoDTO.getApplicantCoupleId(), "type", "Long"));

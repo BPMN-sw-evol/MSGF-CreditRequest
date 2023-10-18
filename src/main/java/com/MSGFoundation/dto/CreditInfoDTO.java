@@ -8,6 +8,7 @@ import java.util.List;
 
 @Data
 public class CreditInfoDTO {
+    private Long codRequest;
     private List<Person> people;
     private Long applicantCoupleId;
     private String processId;
