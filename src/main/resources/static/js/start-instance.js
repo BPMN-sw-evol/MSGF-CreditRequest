@@ -14,8 +14,6 @@ function enviarFilaConEstadoDraft() {
 
             // Crear un formulario oculto y agregar los datos a enviar
             var form = document.createElement('form');
-            form.setAttribute('method', 'get');
-            form.setAttribute('action', '/complete');
 
             // Después de obtener los valores
             document.getElementById('taskId').value = taskId;
@@ -35,15 +33,25 @@ function enviarFilaConEstadoDraft() {
 
     // Mostrar la alerta de éxito o error después de enviar el formulario
     if (formularioEnviado) {
-        // Muestra la alerta de éxito
         Swal.fire({
             position: 'center',
-            icon: 'success',
-            title: 'Success!',
-            text: 'The application has been sent successfully',
+            icon: 'info',
+            title: 'sending response',
+            timerProgressBar: true,
             showConfirmButton: false,
-            timer: 4500
-        });
+            timer: 2500
+        }).then((result) => {
+            /* Read more about handling dismissals below */
+            if (result.dismiss === Swal.DismissReason.timer) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'successful sending!',
+                    text: 'The application has been sent successfully',
+                    showConfirmButton: false,
+                })
+            }
+        })
     } else {
         // Muestra la alerta de error
         Swal.fire({
@@ -52,7 +60,7 @@ function enviarFilaConEstadoDraft() {
             title: 'Error!',
             text: 'Please try to send the application again',
             showConfirmButton: false,
-            timer: 4500
+            timer: 1000
         });
     }
 

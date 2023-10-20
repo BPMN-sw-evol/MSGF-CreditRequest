@@ -192,9 +192,6 @@ function updateCoupleSavingsMax() {
 
     // Establecer el valor máximo de coupleSavings
     coupleSavingsInput.max = housePricesValue * 0.10;
-
-    // Establecer el valor del paso (step) como el 10% del máximo
-    coupleSavingsInput.step = housePricesValue * 0.01; // Por ejemplo, 1% del máximo
 }
 
 
@@ -229,13 +226,25 @@ function validateFormField(form) {
     const formElements = form.elements;
     // Verifica si todos los campos tienen la clase 'is-valid'
     if (validElementsCouple.length === formElements.length - 1) {
+        // Mostrar la alerta con un indicador de carga al inicio del envío del formulario
         Swal.fire({
             position: 'center',
-            icon: 'success',
-            title: 'success!',
-            text: 'the couple has been successfully registered',
+            icon: 'info',
+            title: 'sending response',
+            timerProgressBar: true,
             showConfirmButton: false,
-            timer: 4500
+            timer: 2500
+        }).then((result) => {
+            /* Read more about handling dismissals below */
+            if (result.dismiss === Swal.DismissReason.timer) {
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'successful sending!',
+                    text: 'the couple has been successfully registered',
+                    showConfirmButton: false,
+                })
+            }
         })
         return true; // Envía el formulario si todos los campos son válidos
     } else {
@@ -246,7 +255,7 @@ function validateFormField(form) {
             title: 'Error!',
             text: 'please enter correct information',
             showConfirmButton: false,
-            timer: 4500
+            timer: 1000
         })
         return false; // Evita el envío del formulario
     }
