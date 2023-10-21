@@ -25,7 +25,8 @@
                         <h3>Couple ID 2: <span th:text="${people[1].getId()}"></span></h3>
                         <br>
                         <button id="editCredit" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                            Edit Current Request
+                            <i class="fa-solid fa-pen mx-1"></i>
+                            <span>Edit Current Request</span>
                         </button>
                     </div>
 
@@ -34,7 +35,7 @@
                     <form action="/complete" method="get">
                         <table class="table table-striped" id="creditTable">
                             <thead>
-                            <tr>
+                            <tr class="text-center">
                                 <th scope="col">Credit Cod</th>
                                 <th scope="col">House Price</th>
                                 <th scope="col">Quota Value</th>
@@ -43,7 +44,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="creditRequest : ${creditInfo}" th:data-credit-request="${creditRequest}">
+                            <tr class="text-center" th:each="creditRequest : ${creditInfo}" th:data-credit-request="${creditRequest}">
                                 <td><span th:text="${creditRequest.processId}"></span></td>
                                 <td><span th:text="${creditRequest.housePrices}"></span></td>
                                 <td><span th:text="${creditRequest.quotaValue}"></span></td>
@@ -56,7 +57,10 @@
                         <input type="hidden" name="taskId" id="taskId" />
 
                         <div class="text-center">
-                            <button id="confirmRequest" class="btn btn-danger" type="submit" onclick="enviarFilaConEstadoDraft()">Confirm Request</button>
+                            <button id="confirmRequest" class="btn btn-danger" type="submit" onclick="enviarFilaConEstadoDraft()">
+                                <i class="fa-solid fa-circle-check mx-1"></i>
+                                <span>Confirm Request</span>
+                            </button>
                         </div>
                     </form>
 
