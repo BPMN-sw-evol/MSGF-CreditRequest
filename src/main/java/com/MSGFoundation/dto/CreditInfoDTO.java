@@ -19,4 +19,5 @@ public class CreditInfoDTO {
     private Long coupleSavings;
     private String status;
     private LocalDateTime requestDate;
+    private TaskInfo taskInfo;
 }
