@@ -116,8 +116,9 @@ public class CreditRequestController {
 
         System.out.println("aqui estoy: "+creditId.get(0).getCodRequest());
         creditRequestService.updateCreditRequest(creditId.get(0).getCodRequest(), creditRequest);
+        String result = processService.updateProcessVariables(creditRequest.getProcessId(),creditRequest);
 
-        return new RedirectView("/view-credit");
+        return new RedirectView("/view-credit?coupleId="+result);
     }
 
     @DeleteMapping("/delete/{id}")

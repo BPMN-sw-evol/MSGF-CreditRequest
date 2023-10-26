@@ -183,6 +183,35 @@ public class ProcessService {
         }
     }
 
+    public String updateProcessVariables(String processId, CreditRequest creditRequest) {
+        String camundaUrl = "http://localhost:9000/engine-rest/process-instance/" + processId + "/variables";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        Map<String, Object> modifications = new HashMap<>();
+        modifications.put("marriageYears", Map.of("value", creditRequest.getMarriageYears(), "type", "Long"));
+        modifications.put("bothEmployees", Map.of("value", creditRequest.getBothEmployees(), "type", "Boolean"));
+        modifications.put("applicantCouple", Map.of("value", creditRequest.getApplicantCouple().getId(), "type", "Long"));
+        modifications.put("coupleName1", Map.of("value", creditRequest.getApplicantCouple().getPartner1().getFullname(), "type", "String"));
+        modifications.put("coupleName2", Map.of("value", creditRequest.getApplicantCouple().getPartner2().getFullname(), "type", "String"));
+        modifications.put("creationDate", Map.of("value", creditRequest.getRequestDate().toString(), "type", "String"));
+        modifications.put("codRequest", Map.of("value", creditRequest.getCodRequest(), "type", "Long"));
+
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("modifications", modifications);
+
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
+
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(camundaUrl, HttpMethod.POST, requestEntity, String.class);
+            System.out.println("Variables updated successfully: " + response.getBody());
+            return String.valueOf(creditRequest.getApplicantCouple().getId());
+        } catch (Exception e) {
+            System.err.println("Error while updating variables: " + e.getMessage());
+        }
+        return "";
+    }
+
     public String completeTask(String processId) {
         // Obtener la información de la tarea a partir del Process ID
         TaskInfo taskInfo = getTaskInfoByProcessId(processId);
