@@ -1,16 +1,19 @@
 package com.MSGFoundation.service;
 
 import com.MSGFoundation.dto.CreditInfoDTO;
+import com.MSGFoundation.dto.TaskInfo;
 import com.MSGFoundation.model.CreditRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.springframework.scheduling.config.Task;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,11 +21,12 @@ import java.util.Map;
 @Service
 public class ProcessService {
     private final RestTemplate restTemplate;
-
     private final CreditRequestService creditRequestService;
 
     @Value("${camunda.url.start}")
     private String camundaStartUrl;
+
+    private List<TaskInfo> tasksList = new ArrayList<>();
 
     @Autowired
     public ProcessService(RestTemplate restTemplate, CreditRequestService creditRequestService) {
@@ -59,8 +63,13 @@ public class ProcessService {
             // Realizar la solicitud POST a Camunda
             ResponseEntity<Map> response = restTemplate.postForEntity(camundaStartUrl, requestEntity, Map.class);
             String processId = String.valueOf(response.getBody().get("id"));
-            String taskId = getTaskIdByProcessId(processId);
-            setAssignee(taskId,"MarriedCouple");
+            TaskInfo taskInfo = getTaskInfoByProcessIdWithApi(processId);
+            setAssignee(taskInfo.getTaskId(),"MarriedCouple");
+            taskInfo.setProcessId(processId);
+            System.out.println("taskinfo info info: "+taskInfo.toString());
+
+
+
             return processId;
         } catch (HttpClientErrorException e) {
             String errorMessage = e.getResponseBodyAsString();
@@ -88,28 +97,36 @@ public class ProcessService {
         }
     }
 
-    public Map<String, String> getTaskInfoByProcessId(String processId) {
+    public TaskInfo getTaskInfoByProcessId(String processId) {
         // Construir la URL para consultar las tareas relacionadas con el proceso
         String camundaUrl = "http://localhost:9000/engine-rest/task?processInstanceId=" + processId;
 
         try {
             // Realizar una solicitud GET a Camunda para obtener la lista de tareas
-            ResponseEntity<List<Map>> response = restTemplate.exchange(camundaUrl, HttpMethod.GET, null, new ParameterizedTypeReference<List<Map>>() {});
+            ResponseEntity<List<Map>> response = restTemplate.exchange(camundaUrl, HttpMethod.GET, null, new ParameterizedTypeReference<List<Map>>() {
+            });
 
             // Verificar si la respuesta contiene tareas
             List<Map> tasks = response.getBody();
             if (tasks != null && !tasks.isEmpty()) {
                 // Supongamos que tomamos la primera tarea encontrada
-                Map<String, String> taskInfo = new HashMap<>();
-                taskInfo.put("taskId", String.valueOf(tasks.get(0).get("id")));
-                taskInfo.put("taskName", String.valueOf(tasks.get(0).get("name")));
-                //taskInfo.put("assignee", String.valueOf(tasks.get(0).get("assignee")));
+                Map<String, String> taskInfoMap = new HashMap<>();
+                taskInfoMap.put("taskId", String.valueOf(tasks.get(0).get("id")));
+                taskInfoMap.put("taskName", String.valueOf(tasks.get(0).get("name")));
+                taskInfoMap.put("assignee", String.valueOf(tasks.get(0).get("assignee")));
 
                 System.out.println("Task Info for Process ID " + processId + ":");
-                System.out.println("Task ID: " + taskInfo.get("taskId"));
-                System.out.println("Task Name: " + taskInfo.get("taskName"));
-                //System.out.println("Assignee: " + taskInfo.get("assignee"));
+                System.out.println("Task ID: " + taskInfoMap.get("taskId"));
+                System.out.println("Task Name: " + taskInfoMap.get("taskName"));
+                System.out.println("Assignee: " + taskInfoMap.get("assignee"));
 
+                TaskInfo taskInfo = new TaskInfo();
+                taskInfo.setProcessId(processId);
+                taskInfo.setTaskId(taskInfoMap.get("taskId"));
+                taskInfo.setTaskName(taskInfoMap.get("taskName"));
+                taskInfo.setTaskAssignee(taskInfoMap.get("assignee"));
+
+                tasksList.add(taskInfo);
                 return taskInfo;
             } else {
                 System.err.println("No tasks found for Process ID " + processId);
@@ -123,30 +140,56 @@ public class ProcessService {
     }
 
     public String getTaskIdByProcessId(String processId) {
-        Map<String, String> taskInfo = getTaskInfoByProcessId(processId);
-        if (taskInfo != null) {
-            return taskInfo.get("taskId");
-        } else {
-            return null;
+        for (TaskInfo taskInfo : tasksList) {
+            if (taskInfo.getProcessId().equals(processId)) {
+                return taskInfo.getTaskId();
+            }
         }
+        return null;
     }
 
     public String getTaskNameByProcessId(String processId) {
-        Map<String, String> taskInfo = getTaskInfoByProcessId(processId);
-        if (taskInfo != null) {
-            return taskInfo.get("taskName");
-        } else {
+        for (TaskInfo taskInfo : tasksList) {
+            if (taskInfo.getProcessId().equals(processId)) {
+                return taskInfo.getTaskName();
+            }
+        }
+        return null;
+    }
+
+    public TaskInfo getTaskInfoByProcessIdWithApi(String processId) {
+        String camundaUrl = "http://localhost:9000/engine-rest/task?processInstanceId=" + processId;
+
+        try {
+            ResponseEntity<List<Map>> response = restTemplate.exchange(camundaUrl, HttpMethod.GET, null, new ParameterizedTypeReference<List<Map>>() {
+            });
+            List<Map> tasks = response.getBody();
+
+            if (tasks != null && !tasks.isEmpty()) {
+                TaskInfo taskInfo = new TaskInfo();
+                taskInfo.setTaskId(String.valueOf(tasks.get(0).get("id")));
+                taskInfo.setTaskName(String.valueOf(tasks.get(0).get("name")));
+                taskInfo.setTaskAssignee(String.valueOf(tasks.get(0).get("assignee")));
+
+                return taskInfo;
+            } else {
+                System.err.println("No tasks found for Process ID " + processId);
+                return null;
+            }
+        } catch (HttpClientErrorException e) {
+            String errorMessage = e.getResponseBodyAsString();
+            System.err.println("Error en la solicitud a Camunda: " + errorMessage);
             return null;
         }
     }
 
     public String completeTask(String processId) {
         // Obtener la información de la tarea a partir del Process ID
-        Map<String, String> taskInfo = getTaskInfoByProcessId(processId);
+        TaskInfo taskInfo = getTaskInfoByProcessId(processId);
 
         if (taskInfo != null) {
             // Extraer el Task ID de la información de la tarea
-            String taskId = taskInfo.get("taskId");
+            String taskId = taskInfo.getTaskId();
             System.out.println("este es el taskid a completar: "+taskId);
 
             // Construir el cuerpo de la solicitud para Camunda
@@ -163,8 +206,8 @@ public class ProcessService {
             try {
                 // Realizar la solicitud POST a Camunda
                 ResponseEntity<Map> response = restTemplate.postForEntity(camundaUrl, requestEntity, Map.class);
-                String taskId1 = getTaskIdByProcessId(processId);
-                setAssignee(taskId1,"CreditAnalyst");
+                TaskInfo taskInfo1 = getTaskInfoByProcessIdWithApi(processId);
+                setAssignee(taskInfo1.getTaskId(),"CreditAnalyst");
                 CreditRequest creditRequest = creditRequestService.getCreditRequestByProcessId(processId);
                 System.out.println(creditRequest.getCodRequest());
                 String taskName = getTaskNameByProcessId(creditRequest.getProcessId());
