@@ -43,6 +43,9 @@ public class ProcessService {
         String coupleName1 = creditInfoDTO.getPeople().get(0).getFullname();
         String coupleName2 = creditInfoDTO.getPeople().get(1).getFullname();
 
+        String coupleEmail1 = creditInfoDTO.getPeople().get(0).getEmail();
+        String coupleEmail2 = creditInfoDTO.getPeople().get(1).getEmail();
+
         // Crear un mapa para los atributos que deseas enviar
         Map<String, Object> variables = new HashMap<>();
         variables.put("codRequest",Map.of("value", creditInfoDTO.getCodRequest(), "type", "Long"));
@@ -51,6 +54,8 @@ public class ProcessService {
         variables.put("applicantCouple", Map.of("value", creditInfoDTO.getApplicantCoupleId(), "type", "Long"));
         variables.put("coupleName1", Map.of("value", coupleName1, "type", "String"));
         variables.put("coupleName2", Map.of("value", coupleName2, "type", "String"));
+        variables.put("coupleEmail1", Map.of("value", coupleEmail1, "type", "String"));
+        variables.put("coupleEmail2", Map.of("value", coupleEmail2, "type", "String"));
         variables.put("creationDate", Map.of("value", String.valueOf(creditInfoDTO.getRequestDate()),"type","String"));
 
         // Crear el cuerpo de la solicitud
