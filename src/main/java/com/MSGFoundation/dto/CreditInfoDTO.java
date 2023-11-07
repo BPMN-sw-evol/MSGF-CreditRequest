@@ -20,4 +20,5 @@ public class CreditInfoDTO {
     private String status;
     private LocalDateTime requestDate;
     private TaskInfo taskInfo;
+    private Long countReviewCR;
 }

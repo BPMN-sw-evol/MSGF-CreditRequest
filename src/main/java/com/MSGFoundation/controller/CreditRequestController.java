@@ -68,8 +68,10 @@ public class CreditRequestController {
         Long coupleId = coupleController.getCouplebyIds(partner1.getId(), partner2.getId()).getBody();
         Couple couple = coupleController.getCoupleById(coupleId);
         creditRequest.setApplicantCouple(couple);
+        creditRequest.setCountReviewCR(0L);
         creditInfoDTO.setApplicantCoupleId(coupleId);
         creditInfoDTO.setRequestDate(currentDate);
+        creditInfoDTO.setCountReviewCR(0L);
 
         redirectAttributes.addAttribute("coupleId",coupleId);
 

@@ -30,7 +30,10 @@ public class CreditRequest {
     private String status;
     @Column(name = "requestDate")
     private LocalDateTime requestDate;
+    @Column(name = "countReviewCR")
+    private Long countReviewCR;
     @JoinColumn(name = "FK_COUPLE")
     @OneToOne
     private Couple applicantCouple;
+
 }
