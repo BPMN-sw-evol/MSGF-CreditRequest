@@ -57,6 +57,8 @@ public class ProcessService {
         variables.put("coupleEmail1", Map.of("value", coupleEmail1, "type", "String"));
         variables.put("coupleEmail2", Map.of("value", coupleEmail2, "type", "String"));
         variables.put("creationDate", Map.of("value", String.valueOf(creditInfoDTO.getRequestDate()),"type","String"));
+        variables.put("countReviewsBpm", Map.of("value", 0,"type","Long"));
+
 
         // Crear el cuerpo de la solicitud
         Map<String, Object> requestBody = new HashMap<>();
