@@ -5,7 +5,7 @@ import com.MSGFoundation.model.Couple;
 import com.MSGFoundation.model.CreditRequest;
 import com.MSGFoundation.model.Person;
 import com.MSGFoundation.service.CreditRequestService;
-import com.MSGFoundation.service.ProcessService;
+import com.MSGFoundation.service.MarriedCoupleService;
 import com.MSGFoundation.util.RequestStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +23,13 @@ public class CreditRequestController {
     private final CreditRequestService creditRequestService;
     private final CoupleController coupleController;
     private final PersonController personController;
-    private final ProcessService processService;
+    private final MarriedCoupleService marriedCoupleService;
 
     @Autowired
-    public CreditRequestController(CreditRequestService creditRequestService, CoupleController coupleController, PersonController personController, ProcessService processService){        this.creditRequestService = creditRequestService;
+    public CreditRequestController(CreditRequestService creditRequestService, CoupleController coupleController, PersonController personController, MarriedCoupleService marriedCoupleService){        this.creditRequestService = creditRequestService;
         this.coupleController = coupleController;
         this.personController = personController;
-        this.processService = processService;
+        this.marriedCoupleService = marriedCoupleService;
     }
 
     @GetMapping("/")
@@ -78,7 +78,7 @@ public class CreditRequestController {
         creditRequestService.createCreditRequest(creditRequest);
         List<CreditRequest> updateCredit = creditRequestService.findCreditByCouple(couple);
         creditInfoDTO.setCodRequest(updateCredit.get(0).getCodRequest());
-        String processId = processService.startProcessInstance(creditInfoDTO);
+        String processId = marriedCoupleService.startProcessInstance(creditInfoDTO);
 
         for (CreditRequest request : updateCredit) {
             if ("DRAFT".equals(request.getStatus())) {
@@ -118,7 +118,7 @@ public class CreditRequestController {
 
         System.out.println("aqui estoy: "+creditId.get(0).getCodRequest());
         creditRequestService.updateCreditRequest(creditId.get(0).getCodRequest(), creditRequest);
-        String result = processService.updateProcessVariables(creditRequest.getProcessId(),creditRequest);
+        String result = marriedCoupleService.updateProcessVariables(creditRequest.getProcessId(),creditRequest);
 
         return new RedirectView("/view-credit?coupleId="+result);
     }

@@ -3,11 +3,13 @@ package com.MSGFoundation.service;
 import com.MSGFoundation.dto.CreditInfoDTO;
 import com.MSGFoundation.dto.TaskInfo;
 import com.MSGFoundation.model.CreditRequest;
+import com.msgfoundation.annotations.BPMNGetterVariables;
+import com.msgfoundation.annotations.BPMNSetterVariables;
+import com.msgfoundation.annotations.BPMNTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
-import org.springframework.scheduling.config.Task;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -19,7 +21,8 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class ProcessService {
+@BPMNTask(type = "usertask", name = "Diligenciar formulario de solicitud")
+public class MarriedCoupleService {
     private final RestTemplate restTemplate;
     private final CreditRequestService creditRequestService;
 
@@ -29,11 +32,11 @@ public class ProcessService {
     private List<TaskInfo> tasksList = new ArrayList<>();
 
     @Autowired
-    public ProcessService(RestTemplate restTemplate, CreditRequestService creditRequestService) {
+    public MarriedCoupleService(RestTemplate restTemplate, CreditRequestService creditRequestService) {
         this.restTemplate = restTemplate;
         this.creditRequestService = creditRequestService;
     }
-
+    @BPMNGetterVariables(variables = "creditInfoDTO")
     public String startProcessInstance(CreditInfoDTO creditInfoDTO){
 
         // Construir el cuerpo de la solicitud para Camunda
@@ -84,6 +87,7 @@ public class ProcessService {
         }
     }
 
+    @BPMNSetterVariables(variables = "assignee")
     public void setAssignee(String taskId, String userId) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -104,6 +108,7 @@ public class ProcessService {
         }
     }
 
+    @BPMNGetterVariables(variables = "TaskInfo")
     public TaskInfo getTaskInfoByProcessId(String processId) {
         // Construir la URL para consultar las tareas relacionadas con el proceso
         String camundaUrl = "http://localhost:9000/engine-rest/task?processInstanceId=" + processId;
@@ -146,6 +151,7 @@ public class ProcessService {
         }
     }
 
+    @BPMNGetterVariables(variables = "taskId")
     public String getTaskIdByProcessId(String processId) {
         for (TaskInfo taskInfo : tasksList) {
             if (taskInfo.getProcessId().equals(processId)) {
@@ -155,6 +161,7 @@ public class ProcessService {
         return null;
     }
 
+    @BPMNGetterVariables(variables = "taskName")
     public String getTaskNameByProcessId(String processId) {
         for (TaskInfo taskInfo : tasksList) {
             if (taskInfo.getProcessId().equals(processId)) {
@@ -164,6 +171,7 @@ public class ProcessService {
         return null;
     }
 
+    @BPMNGetterVariables(variables = "taskName")
     public TaskInfo getTaskInfoByProcessIdWithApi(String processId) {
         String camundaUrl = "http://localhost:9000/engine-rest/task?processInstanceId=" + processId;
 
@@ -190,6 +198,7 @@ public class ProcessService {
         }
     }
 
+    @BPMNSetterVariables(variables = "creditRequest")
     public String updateProcessVariables(String processId, CreditRequest creditRequest) {
         String camundaUrl = "http://localhost:9000/engine-rest/process-instance/" + processId + "/variables";
         HttpHeaders headers = new HttpHeaders();
@@ -219,6 +228,7 @@ public class ProcessService {
         return "";
     }
 
+    @BPMNSetterVariables()
     public String completeTask(String processId) {
         // Obtener la información de la tarea a partir del Process ID
         TaskInfo taskInfo = getTaskInfoByProcessId(processId);

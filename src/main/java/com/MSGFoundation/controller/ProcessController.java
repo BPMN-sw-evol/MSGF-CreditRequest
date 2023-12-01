@@ -1,33 +1,27 @@
 package com.MSGFoundation.controller;
 
 import com.MSGFoundation.dto.CreditInfoDTO;
-import com.MSGFoundation.service.ProcessService;
-import org.springframework.http.*;
+import com.MSGFoundation.service.MarriedCoupleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Controller
 public class ProcessController {
-    private final ProcessService processService;
+    private final MarriedCoupleService marriedCoupleService;
 
-    public ProcessController(ProcessService processService) {
-        this.processService = processService;
+    public ProcessController(MarriedCoupleService marriedCoupleService) {
+        this.marriedCoupleService = marriedCoupleService;
     }
 
     @PostMapping("/startProcess")
     public String startProcessInstance(@ModelAttribute CreditInfoDTO creditInfoDTO) {
-        this.processService.startProcessInstance(creditInfoDTO);
+        this.marriedCoupleService.startProcessInstance(creditInfoDTO);
         return "redirect:/view-credit";
     }
 
     @GetMapping("/complete")
     public String completeTask(@RequestParam(name = "taskId") String taskId) {
-        String resultado = this.processService.completeTask(taskId);
+        String resultado = this.marriedCoupleService.completeTask(taskId);
         return "redirect:/view-credit?coupleId="+resultado;
     }
 }
