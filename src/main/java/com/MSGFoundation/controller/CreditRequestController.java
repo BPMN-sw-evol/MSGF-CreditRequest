@@ -64,7 +64,6 @@ public class CreditRequestController {
         creditRequest.setStatus(RequestStatus.DRAFT.toString());
         LocalDateTime currentDate = LocalDateTime.now();
         creditRequest.setRequestDate(currentDate);
-        System.out.println("aqui estoy: "+creditInfoDTO.getBothEmployees());
         Long coupleId = coupleController.getCouplebyIds(partner1.getId(), partner2.getId()).getBody();
         Couple couple = coupleController.getCoupleById(coupleId);
         creditRequest.setApplicantCouple(couple);
@@ -82,7 +81,6 @@ public class CreditRequestController {
 
         for (CreditRequest request : updateCredit) {
             if ("DRAFT".equals(request.getStatus())) {
-                System.out.println("Solicitud en estado draft: " + request.getCodRequest());
                 request.setProcessId(processId);
                 creditRequestService.updateCreditRequest(request.getCodRequest(), request);
             }
@@ -93,10 +91,7 @@ public class CreditRequestController {
     @PostMapping("/update")
     public RedirectView updateCreditRequest(@ModelAttribute("creditInfoDTO") CreditInfoDTO creditInfoDTO){
 
-        System.out.println("esto es el id: "+creditInfoDTO.getApplicantCoupleId());
-
         List<Person> people = creditInfoDTO.getPeople();
-        System.out.println(creditInfoDTO.toString());
         personController.updatePerson(people.get(0).getId(),people.get(0));
         personController.updatePerson(people.get(1).getId(),people.get(1));
 
@@ -116,7 +111,6 @@ public class CreditRequestController {
         creditRequest.setRequestDate(currentDate);
         creditRequest.setProcessId(creditId.get(0).getProcessId());
 
-        System.out.println("aqui estoy: "+creditId.get(0).getCodRequest());
         creditRequestService.updateCreditRequest(creditId.get(0).getCodRequest(), creditRequest);
         String result = marriedCoupleService.updateProcessVariables(creditRequest.getProcessId(),creditRequest);
 

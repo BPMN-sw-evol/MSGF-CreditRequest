@@ -36,8 +36,10 @@ public class MarriedCoupleService {
         this.restTemplate = restTemplate;
         this.creditRequestService = creditRequestService;
     }
-    @BPMNGetterVariables(variables = "creditInfoDTO")
-    public String startProcessInstance(CreditInfoDTO creditInfoDTO){
+
+    @BPMNGetterVariables(container = "creditInfoDTO", variables = {"codRequest", "marriageYears", "bothEmployees", "applicantCouple",
+            "coupleName1", "coupleName2", "coupleEmail1", "coupleEmail2", "creationDate", "countReviewsBpm"})
+    public String startProcessInstance(CreditInfoDTO creditInfoDTO) {
 
         // Construir el cuerpo de la solicitud para Camunda
         HttpHeaders headers = new HttpHeaders();
@@ -51,7 +53,7 @@ public class MarriedCoupleService {
 
         // Crear un mapa para los atributos que deseas enviar
         Map<String, Object> variables = new HashMap<>();
-        variables.put("codRequest",Map.of("value", creditInfoDTO.getCodRequest(), "type", "Long"));
+        variables.put("codRequest", Map.of("value", creditInfoDTO.getCodRequest(), "type", "Long"));
         variables.put("marriageYears", Map.of("value", creditInfoDTO.getMarriageYears(), "type", "Long"));
         variables.put("bothEmployees", Map.of("value", creditInfoDTO.getBothEmployees(), "type", "Boolean"));
         variables.put("applicantCouple", Map.of("value", creditInfoDTO.getApplicantCoupleId(), "type", "Long"));
@@ -59,8 +61,8 @@ public class MarriedCoupleService {
         variables.put("coupleName2", Map.of("value", coupleName2, "type", "String"));
         variables.put("coupleEmail1", Map.of("value", coupleEmail1, "type", "String"));
         variables.put("coupleEmail2", Map.of("value", coupleEmail2, "type", "String"));
-        variables.put("creationDate", Map.of("value", String.valueOf(creditInfoDTO.getRequestDate()),"type","String"));
-        variables.put("countReviewsBpm", Map.of("value", 0,"type","Long"));
+        variables.put("creationDate", Map.of("value", String.valueOf(creditInfoDTO.getRequestDate()), "type", "String"));
+        variables.put("countReviewsBpm", Map.of("value", 0, "type", "Long"));
 
 
         // Crear el cuerpo de la solicitud
@@ -74,10 +76,8 @@ public class MarriedCoupleService {
             ResponseEntity<Map> response = restTemplate.postForEntity(camundaStartUrl, requestEntity, Map.class);
             String processId = String.valueOf(response.getBody().get("id"));
             TaskInfo taskInfo = getTaskInfoByProcessIdWithApi(processId);
-            setAssignee(taskInfo.getTaskId(),"MarriedCouple");
+            setAssignee(taskInfo.getTaskId(), "MarriedCouple");
             taskInfo.setProcessId(processId);
-            System.out.println("taskinfo info info: "+taskInfo.toString());
-
 
 
             return processId;
@@ -87,7 +87,6 @@ public class MarriedCoupleService {
         }
     }
 
-    @BPMNSetterVariables(variables = "assignee")
     public void setAssignee(String taskId, String userId) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -108,7 +107,6 @@ public class MarriedCoupleService {
         }
     }
 
-    @BPMNGetterVariables(variables = "TaskInfo")
     public TaskInfo getTaskInfoByProcessId(String processId) {
         // Construir la URL para consultar las tareas relacionadas con el proceso
         String camundaUrl = "http://localhost:9000/engine-rest/task?processInstanceId=" + processId;
@@ -151,7 +149,6 @@ public class MarriedCoupleService {
         }
     }
 
-    @BPMNGetterVariables(variables = "taskId")
     public String getTaskIdByProcessId(String processId) {
         for (TaskInfo taskInfo : tasksList) {
             if (taskInfo.getProcessId().equals(processId)) {
@@ -161,7 +158,6 @@ public class MarriedCoupleService {
         return null;
     }
 
-    @BPMNGetterVariables(variables = "taskName")
     public String getTaskNameByProcessId(String processId) {
         for (TaskInfo taskInfo : tasksList) {
             if (taskInfo.getProcessId().equals(processId)) {
@@ -171,7 +167,6 @@ public class MarriedCoupleService {
         return null;
     }
 
-    @BPMNGetterVariables(variables = "taskName")
     public TaskInfo getTaskInfoByProcessIdWithApi(String processId) {
         String camundaUrl = "http://localhost:9000/engine-rest/task?processInstanceId=" + processId;
 
@@ -198,7 +193,8 @@ public class MarriedCoupleService {
         }
     }
 
-    @BPMNSetterVariables(variables = "creditRequest")
+    @BPMNSetterVariables(variables = {"marriageYears", "bothEmployees", "applicantCouple",
+            "coupleName1", "coupleName2", "creationDate", "codRequest"})
     public String updateProcessVariables(String processId, CreditRequest creditRequest) {
         String camundaUrl = "http://localhost:9000/engine-rest/process-instance/" + processId + "/variables";
         HttpHeaders headers = new HttpHeaders();
@@ -228,7 +224,6 @@ public class MarriedCoupleService {
         return "";
     }
 
-    @BPMNSetterVariables()
     public String completeTask(String processId) {
         // Obtener la información de la tarea a partir del Process ID
         TaskInfo taskInfo = getTaskInfoByProcessId(processId);
@@ -236,7 +231,6 @@ public class MarriedCoupleService {
         if (taskInfo != null) {
             // Extraer el Task ID de la información de la tarea
             String taskId = taskInfo.getTaskId();
-            System.out.println("este es el taskid a completar: "+taskId);
 
             // Construir el cuerpo de la solicitud para Camunda
             HttpHeaders headers = new HttpHeaders();
@@ -253,14 +247,13 @@ public class MarriedCoupleService {
                 // Realizar la solicitud POST a Camunda
                 ResponseEntity<Map> response = restTemplate.postForEntity(camundaUrl, requestEntity, Map.class);
                 TaskInfo taskInfo1 = getTaskInfoByProcessIdWithApi(processId);
-                setAssignee(taskInfo1.getTaskId(),"CreditAnalyst");
+                setAssignee(taskInfo1.getTaskId(), "CreditAnalyst");
                 CreditRequest creditRequest = creditRequestService.getCreditRequestByProcessId(processId);
-                System.out.println(creditRequest.getCodRequest());
                 String taskName = getTaskNameByProcessId(creditRequest.getProcessId());
                 creditRequest.setStatus(taskName);
                 LocalDateTime currentDate = LocalDateTime.now();
                 creditRequest.setRequestDate(currentDate);
-                creditRequestService.updateCreditRequest(creditRequest.getCodRequest(),creditRequest);
+                creditRequestService.updateCreditRequest(creditRequest.getCodRequest(), creditRequest);
                 return String.valueOf(creditRequest.getApplicantCouple().getId());
             } catch (HttpClientErrorException e) {
                 String errorMessage = e.getResponseBodyAsString();
