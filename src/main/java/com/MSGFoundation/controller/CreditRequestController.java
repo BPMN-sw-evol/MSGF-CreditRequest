@@ -16,6 +16,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("credit_request")
@@ -68,9 +69,11 @@ public class CreditRequestController {
         Couple couple = coupleController.getCoupleById(coupleId);
         creditRequest.setApplicantCouple(couple);
         creditRequest.setCountReviewCR(0L);
+        creditRequest.setPdfFile(creditInfoDTO.getPdfFile());
         creditInfoDTO.setApplicantCoupleId(coupleId);
         creditInfoDTO.setRequestDate(currentDate);
         creditInfoDTO.setCountReviewCR(0L);
+
 
         redirectAttributes.addAttribute("coupleId",coupleId);
 
@@ -125,5 +128,13 @@ public class CreditRequestController {
     @GetMapping("/findbyid/{processId}")
     public CreditRequest getCreditRequestByProcessId(@PathVariable String processId){
         return creditRequestService.getCreditRequestByProcessId(processId);
+    }
+
+    @GetMapping("/pdf/{id}")
+    public ResponseEntity<byte[]> getPdf(@PathVariable Long id) {
+        Optional<byte[]> pdfOptional = creditRequestService.findPdfByCreditRequestId(id);
+
+        return pdfOptional.map(pdf -> ResponseEntity.ok().body(pdf))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

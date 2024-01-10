@@ -21,4 +21,5 @@ public class CreditInfoDTO {
     private LocalDateTime requestDate;
     private TaskInfo taskInfo;
     private Long countReviewCR;
+    private byte[] pdfFile;
 }

@@ -146,4 +146,12 @@
                th:value="${creditInfo != null and creditInfo.size() > 0 ? creditInfo[0].coupleSavings:'100000'}">
         <label for="coupleSavings">Couple Savings:</label>
     </div>
+
+    <div class="card-body card-text mt-3 d-flex align-items-center justify-content-center">
+        <div class="text-center">
+            <h4>If you have supports to attach to the application, please upload them in PDF format.</h4>
+            <label for="pdfFile">Choose a PDF file:</label>
+            <input class="form-control" type="file" id="pdfFile" accept=".pdf" name="pdfFile" required onblur="validatePdfFile(this)">
+        </div>
+    </div>
 </div>
