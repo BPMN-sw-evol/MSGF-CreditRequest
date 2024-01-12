@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CreditRequestService {
@@ -45,5 +46,7 @@ public class CreditRequestService {
     }
 
 
-
+    public Optional<byte[]> findPdfByCreditRequestId(Long id) {
+        return creditRequestRepository.findById(id).map(CreditRequest::getPdfFile);
+    }
 }

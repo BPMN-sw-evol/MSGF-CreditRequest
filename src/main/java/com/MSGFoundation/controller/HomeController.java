@@ -31,8 +31,8 @@ public class HomeController {
         return "inicio";
     }
 
-    @GetMapping("/register-credit")
-    public String registerFormView(Model model){
+    @GetMapping("/register-info-credit")
+    public String registerInfoFormView(Model model){
         List<Person> people = new ArrayList<>();
         List<CreditRequest> creditInfo = new ArrayList<>();
 
@@ -42,7 +42,22 @@ public class HomeController {
         model.addAttribute("people",people);
         model.addAttribute("creditInfo",creditInfo);
 
-        return "views/creditForm";
+        return "views/creditInfoForm";
+    }
+
+    @GetMapping("/register-supports-credit")
+    public String registerSupportsFormView(Model model, @RequestParam(name = "coupleId", required = false) Long coupleId){
+        System.out.println("este es el id: "+coupleId);
+        List<Person> people = new ArrayList<>();
+        List<CreditRequest> creditInfo = new ArrayList<>();
+
+        people.add(new Person());
+        people.add(new Person());
+
+        model.addAttribute("people",people);
+        model.addAttribute("creditInfo",creditInfo);
+
+        return "views/creditSupportsForm";
     }
 
     @GetMapping("/view-credit")
