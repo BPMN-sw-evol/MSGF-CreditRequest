@@ -69,6 +69,7 @@ public class CreditRequestController {
         Couple couple = coupleController.getCoupleById(coupleId);
         creditRequest.setApplicantCouple(couple);
         creditRequest.setCountReviewCR(0L);
+        creditRequest.setPdfFile(creditInfoDTO.getPdfFile());
         creditInfoDTO.setApplicantCoupleId(coupleId);
         creditInfoDTO.setRequestDate(currentDate);
         creditInfoDTO.setCountReviewCR(0L);

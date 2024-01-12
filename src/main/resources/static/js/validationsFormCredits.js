@@ -221,6 +221,18 @@ function validateCoupleSavings(inputElement) {
     }
 }
 
+function validatePdfFile(inputElement) {
+    if (!inputElement.value.trim()) {
+        inputElement.classList.remove("is-valid");
+        inputElement.classList.add("is-invalid");
+        return false;
+    } else {
+        inputElement.classList.remove("is-invalid");
+        inputElement.classList.add("is-valid");
+        return true;
+    }
+}
+
 function validateFormField(form) {
     const validElementsCouple = form.querySelectorAll('.is-valid');
     const formElements = form.elements;
