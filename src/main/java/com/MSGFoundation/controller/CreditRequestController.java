@@ -88,7 +88,7 @@ public class CreditRequestController {
                 creditRequestService.updateCreditRequest(request.getCodRequest(), request);
             }
         }
-        return new RedirectView("/register-supports-credit");
+        return new RedirectView("/view-credit");
     }
 
     @PostMapping("/update")
