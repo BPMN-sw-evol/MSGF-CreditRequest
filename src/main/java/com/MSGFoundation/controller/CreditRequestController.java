@@ -73,6 +73,7 @@ public class CreditRequestController {
         creditInfoDTO.setApplicantCoupleId(coupleId);
         creditInfoDTO.setRequestDate(currentDate);
         creditInfoDTO.setCountReviewCR(0L);
+        creditRequest.setPayment(false);
 
 
         redirectAttributes.addAttribute("coupleId",coupleId);

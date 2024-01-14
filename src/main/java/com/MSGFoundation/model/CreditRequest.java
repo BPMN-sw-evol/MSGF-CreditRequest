@@ -34,6 +34,8 @@ public class CreditRequest {
     private Long countReviewCR;
     @Column(name = "pdf_file", columnDefinition = "BYTEA", length = 10485760)
     private byte[] pdfFile;
+    @Column(name = "payment")
+    private Boolean payment;
     @JoinColumn(name = "FK_COUPLE")
     @OneToOne
     private Couple applicantCouple;

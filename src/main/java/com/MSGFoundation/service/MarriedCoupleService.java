@@ -14,6 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -248,6 +252,7 @@ public class MarriedCoupleService {
                 ResponseEntity<Map> response = restTemplate.postForEntity(camundaUrl, requestEntity, Map.class);
                 TaskInfo taskInfo1 = getTaskInfoByProcessIdWithApi(processId);
                 setAssignee(taskInfo1.getTaskId(), "CreditAnalyst");
+                updateReviewAndStatus(processId,"Revisar detalles de solicitud");
                 CreditRequest creditRequest = creditRequestService.getCreditRequestByProcessId(processId);
                 String taskName = getTaskNameByProcessId(creditRequest.getProcessId());
                 creditRequest.setStatus(taskName);
@@ -259,10 +264,35 @@ public class MarriedCoupleService {
                 String errorMessage = e.getResponseBodyAsString();
                 System.err.println("Error en la solicitud a Camunda: " + errorMessage);
                 return null;
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
         } else {
             System.err.println("No se pudo obtener información de la tarea para Process ID " + processId);
             return null;
+        }
+    }
+
+    public void messageEvent(){
+
+    }
+
+    public void updateReviewAndStatus(String processId, String status) throws SQLException {
+        Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/credit_request", "postgres", "admin");
+
+        String updateQuery = "UPDATE credit_request SET status = ? WHERE process_id = ?";
+
+        try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
+            updateStatement.setString(1, status);
+            updateStatement.setString(2, processId);
+
+            int rowsAffected = updateStatement.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Status updated, and count_reviewcr incremented.");
+            } else {
+                System.out.println("No records found for the given processId: " + processId);
+            }
         }
     }
 }
