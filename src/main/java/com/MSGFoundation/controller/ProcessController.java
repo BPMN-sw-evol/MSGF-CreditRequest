@@ -27,6 +27,7 @@ public class ProcessController {
 
     @GetMapping("/message-event")
     public void messageEvent(){
-        marriedCoupleService.messageEvent();
+        System.out.println("prueba envio mensaje");
+        // marriedCoupleService.messageEvent();
     }
 }

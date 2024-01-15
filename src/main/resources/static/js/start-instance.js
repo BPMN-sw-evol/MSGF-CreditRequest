@@ -8,17 +8,24 @@ function enviarFilaConEstadoDraft() {
         if (estado === "DRAFT") {
             // Encuentra la fila con estado "DRAFT", obtén los datos y envíalos al controlador
             var taskId = filas[i].querySelector('td:first-child span').textContent.trim();
-
+            // Verificar el valor de la penúltima columna (penúltimo td) en la última fila
+            var lastColumnValue = filas[i].querySelector("td:nth-last-child(2) span").textContent;
 
             console.log("procesoId: " + taskId);
 
             // Crear un formulario oculto y agregar los datos a enviar
-            var form = document.createElement('form');
+            var form = document.getElementById('routing');
 
             // Después de obtener los valores
             document.getElementById('taskId').value = taskId;
 
             document.body.appendChild(form);
+
+            if(lastColumnValue == 0){
+                form.action = "/complete"
+            }else{
+                form.action = "/message-event"
+            }
 
             // Enviar el formulario
             form.submit();

@@ -28,6 +28,7 @@ import java.util.Map;
 @BPMNTask(type = "usertask", name = "Diligenciar formulario de solicitud")
 public class MarriedCoupleService {
     private final RestTemplate restTemplate;
+
     private final CreditRequestService creditRequestService;
 
     @Value("${camunda.url.start}")
@@ -274,7 +275,27 @@ public class MarriedCoupleService {
     }
 
     public void messageEvent(){
+        // URL de la API REST de Camunda BPM para correlacionar un mensaje
+        String camundaApiUrl = "http://localhost:9000/engine-rest/message";
 
+        // ID del mensaje a correlacionar (debe coincidir con el ID en tu BPMN)
+        String messageId = "Message_3t29gv6";
+
+        // Configuración de cabeceras
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+
+        // Configuración del cuerpo de la solicitud
+        String requestBody = "{ \"messageName\": \"" + messageId + "\", \"correlationKeys\": { \"messageId\": { \"value\": \"" + messageId + "\", \"type\": \"String\" } } }";
+
+        // Realizar la solicitud REST a la API de Camunda
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
+        ResponseEntity<String> responseEntity = restTemplate.exchange(camundaApiUrl, HttpMethod.POST, requestEntity, String.class);
+
+        // Puedes manejar la respuesta según tus necesidades
+        String responseBody = responseEntity.getBody();
+        System.out.println("Respuesta de la API de Camunda: " + responseBody);
     }
 
     public void updateReviewAndStatus(String processId, String status) throws SQLException {

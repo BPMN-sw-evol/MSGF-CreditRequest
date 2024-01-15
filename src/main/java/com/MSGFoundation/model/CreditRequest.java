@@ -36,6 +36,8 @@ public class CreditRequest {
     private byte[] pdfFile;
     @Column(name = "payment")
     private Boolean payment;
+    @Column(name = "term_in_years")
+    private Long termInYears;
     @JoinColumn(name = "FK_COUPLE")
     @OneToOne
     private Couple applicantCouple;
