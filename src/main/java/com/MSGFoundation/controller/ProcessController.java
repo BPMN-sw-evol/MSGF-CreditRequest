@@ -27,8 +27,7 @@ public class ProcessController {
 
     @GetMapping("/message-event")
     public String messageEvent(@RequestParam(name = "taskId") String taskId){
-        System.out.println("prueba envio mensaje: "+taskId);
-        // marriedCoupleService.messageEvent();
+        marriedCoupleService.messageEvent(taskId);
         return "redirect:/view-credit";
     }
 }
