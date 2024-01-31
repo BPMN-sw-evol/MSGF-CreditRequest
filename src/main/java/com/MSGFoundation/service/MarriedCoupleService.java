@@ -44,7 +44,7 @@ public class MarriedCoupleService {
         this.creditRequestService = creditRequestService;
     }
 
-    @BPMNGetterVariables(container = "creditInfoDTO", variables = {"codRequest", "marriageYears", "bothEmployees", "applicantCouple",
+    @BPMNSetterVariables(container = "creditInfoDTO", variables = {"codRequest", "marriageYears", "bothEmployees", "applicantCouple",
             "coupleName1", "coupleName2", "coupleEmail1", "coupleEmail2", "creationDate", "countReviewsBpm"})
     public String startProcessInstance(CreditInfoDTO creditInfoDTO) {
 
