@@ -146,4 +146,34 @@
                th:value="${creditInfo != null and creditInfo.size() > 0 ? creditInfo[0].coupleSavings:'100000'}">
         <label for="coupleSavings">Couple Savings:</label>
     </div>
+    <div class="card-header">
+        <div class="card-title">
+            <h1 class="text-center">Credit Supports</h1>
+            <h4 class="text-center">In this section you will be able to upload the supports required for the credit request.</h4>
+            <p class="text-center">Please make sure that in each compressed file (max size 10MB) you have the necessary supports for the approval of your request.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card-body card-text mt-3 d-flex align-items-center justify-content-center">
+                    <div class="text-center">
+                        <label for="pdfSupport">PDF Support:</label>
+                        <input class="form-control" type="file" id="pdfSupport" accept=".pdf" name="pdfSupport" required onblur="validatePdfFile(this)">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card-body card-text mt-3 d-flex align-items-center justify-content-center">
+                    <div class="text-center">
+                        <label for="workSupport">WORK Support:</label>
+                        <input class="form-control" type="file" id="workSupport" accept=".pdf" name="workSupport" required onblur="validatePdfFile(this)">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>

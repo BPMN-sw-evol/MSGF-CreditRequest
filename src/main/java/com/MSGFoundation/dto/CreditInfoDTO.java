@@ -2,6 +2,7 @@ package com.MSGFoundation.dto;
 
 import com.MSGFoundation.model.Person;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,4 +22,8 @@ public class CreditInfoDTO {
     private LocalDateTime requestDate;
     private TaskInfo taskInfo;
     private Long countReviewCR;
+    private MultipartFile pdfSupport;
+    private String pdfSupportName;
+    private MultipartFile workSupport;
+    private String workSupportName;
 }

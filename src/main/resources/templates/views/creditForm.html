@@ -18,7 +18,7 @@
                         <h1 class="text-center">Personal Information</h1>
                     </div>
                 </div>
-                <form id="personForm" action="credit_request/create" method="post" onsubmit="return validateFormField(this);">
+                <form id="personForm" action="credit_request/create" method="post" enctype="multipart/form-data" onsubmit="return validateFormField(this);">
                     <div th:replace="fragments/formCredit.html"></div>
                     <div class="card-footer d-flex justify-content-around">
                         <button id="submitBothForms" class="btn btn-primary" type="submit"><i class="fa-solid fa-file-arrow-up mx-1"></i><span>Save</span></button>

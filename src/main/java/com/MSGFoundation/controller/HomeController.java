@@ -32,7 +32,7 @@ public class HomeController {
     }
 
     @GetMapping("/register-credit")
-    public String registerFormView(Model model){
+    public String registerInfoFormView(Model model){
         List<Person> people = new ArrayList<>();
         List<CreditRequest> creditInfo = new ArrayList<>();
 
@@ -44,6 +44,7 @@ public class HomeController {
 
         return "views/creditForm";
     }
+
 
     @GetMapping("/view-credit")
     public String registerCreditView(@RequestParam(name = "coupleId", required = false) Long coupleId, Model model){

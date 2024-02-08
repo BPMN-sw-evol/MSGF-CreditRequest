@@ -24,4 +24,10 @@ public class ProcessController {
         String resultado = this.marriedCoupleService.completeTask(taskId);
         return "redirect:/view-credit?coupleId="+resultado;
     }
+
+    @GetMapping("/message-event")
+    public String messageEvent(@RequestParam(name = "taskId") String taskId){
+        marriedCoupleService.messageEvent(taskId);
+        return "redirect:/view-credit";
+    }
 }
