@@ -70,6 +70,8 @@ public class MarriedCoupleService {
         variables.put("coupleEmail2", Map.of("value", coupleEmail2, "type", "String"));
         variables.put("creationDate", Map.of("value", String.valueOf(creditInfoDTO.getRequestDate()), "type", "String"));
         variables.put("countReviewsBpm", Map.of("value", 0, "type", "Long"));
+        variables.put("pdfSupport", Map.of("value", creditInfoDTO.getPdfSupportName(), "type", "String"));
+        variables.put("workSupport", Map.of("value", creditInfoDTO.getWorkSupportName(), "type", "String"));
 
         // Crear el cuerpo de la solicitud
         Map<String, Object> requestBody = new HashMap<>();

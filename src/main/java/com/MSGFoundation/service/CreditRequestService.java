@@ -45,8 +45,4 @@ public class CreditRequestService {
         return creditRequestRepository.findByProcessId(processId);
     }
 
-
-    public Optional<byte[]> findPdfByCreditRequestId(Long id) {
-        return creditRequestRepository.findById(id).map(CreditRequest::getPdfFile);
-    }
 }

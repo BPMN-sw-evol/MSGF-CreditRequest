@@ -32,8 +32,10 @@ public class CreditRequest {
     private LocalDateTime requestDate;
     @Column(name = "countReviewCR")
     private Long countReviewCR;
-    @Column(name = "pdf_file", columnDefinition = "BYTEA", length = 10485760)
-    private byte[] pdfFile;
+    @Column(name = "pdfSupport")
+    private String pdfSupport;
+    @Column(name = "workSupport")
+    private String workSupport;
     @Column(name = "payment")
     private Boolean payment;
     @Column(name = "term_in_years", columnDefinition = "BIGINT DEFAULT 20")
