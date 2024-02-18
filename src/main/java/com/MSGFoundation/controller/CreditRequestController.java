@@ -107,7 +107,7 @@ public class CreditRequestController {
             }
         }
 
-        String destinationFolder = Paths.get(System.getProperty("user.dir"), "credit-supports").toString();
+        String destinationFolder = Paths.get(System.getProperty("user.dir"), "supporting-docs").toString();
 
         try {
             File folder = new File(destinationFolder);
