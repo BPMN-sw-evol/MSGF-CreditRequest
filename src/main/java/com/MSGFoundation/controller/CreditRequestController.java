@@ -113,9 +113,9 @@ public class CreditRequestController {
             File folder = new File(destinationFolder);
             if (!folder.exists()) {
                 if (folder.mkdirs()) {
-                    System.out.println("Carpeta creada correctamente");
+                    System.out.println("Folder has been created successfully");
                 } else {
-                    System.err.println("Error al crear la carpeta");
+                    System.err.println("Error creating folder");
                 }
             }
 
