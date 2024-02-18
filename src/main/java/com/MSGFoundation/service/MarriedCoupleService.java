@@ -209,13 +209,19 @@ public class MarriedCoupleService {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         Map<String, Object> modifications = new HashMap<>();
-        modifications.put("marriageYears", Map.of("value", creditRequest.getMarriageYears(), "type", "Long"));
-        modifications.put("bothEmployees", Map.of("value", creditRequest.getBothEmployees(), "type", "Boolean"));
-        modifications.put("applicantCouple", Map.of("value", creditRequest.getApplicantCouple().getId(), "type", "Long"));
         modifications.put("coupleName1", Map.of("value", creditRequest.getApplicantCouple().getPartner1().getFullname(), "type", "String"));
+        modifications.put("coupleEmail1", Map.of("value",creditRequest.getApplicantCouple().getPartner1().getEmail()));
         modifications.put("coupleName2", Map.of("value", creditRequest.getApplicantCouple().getPartner2().getFullname(), "type", "String"));
+        modifications.put("coupleEmail2", Map.of("value",creditRequest.getApplicantCouple().getPartner2().getEmail()));
         modifications.put("creationDate", Map.of("value", creditRequest.getRequestDate().toString(), "type", "String"));
         modifications.put("codRequest", Map.of("value", creditRequest.getCodRequest(), "type", "Long"));
+        modifications.put("applicantCouple", Map.of("value", creditRequest.getApplicantCouple().getId(), "type", "Long"));
+        modifications.put("coupleSavings", Map.of("value", creditRequest.getCoupleSavings(), "type", "Long"));
+        modifications.put("marriageYears", Map.of("value", creditRequest.getMarriageYears(), "type", "Long"));
+        modifications.put("bothEmployees", Map.of("value", creditRequest.getBothEmployees(), "type", "Boolean"));
+        modifications.put("pdfSupport", Map.of("value", creditRequest.getPdfSupport(), "type", "String"));
+        modifications.put("workSupport", Map.of("value", creditRequest.getWorkSupport(), "type", "String"));
+
 
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("modifications", modifications);
@@ -316,7 +322,11 @@ public class MarriedCoupleService {
         }
     }
 
+    public Long getCountReview(String processId){
+        CreditRequest creditRequest = creditRequestService.getCreditRequestByProcessId(processId);
+        return creditRequest.getCountReviewCR();
 
+    }
 
     public void updateReviewAndStatus(String processId, String status) throws SQLException {
         Connection connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/credit_request", "postgres", "admin");

@@ -76,7 +76,7 @@ public class CreditRequestController {
         Couple couple = coupleController.getCoupleById(coupleId);
         creditRequest.setApplicantCouple(couple);
         creditRequest.setCountReviewCR(0L);
-
+        creditRequest.setTermInYears(20L);
 
         String pdfSupportName = String.format("%s-%s-pdf-support.pdf", partner1.getId(), partner2.getId());
         String workSupportName = String.format("%s-%s-work-support.pdf", partner1.getId(), partner2.getId());
@@ -152,7 +152,14 @@ public class CreditRequestController {
         creditRequest.setStatus(RequestStatus.DRAFT.toString());
         LocalDateTime currentDate = LocalDateTime.now();
         creditRequest.setRequestDate(currentDate);
+        creditRequest.setPayment(false);
+        creditRequest.setTermInYears(20L);
+        creditRequest.setCountReviewCR(marriedCoupleService.getCountReview(creditId.get(0).getProcessId()));
         creditRequest.setProcessId(creditId.get(0).getProcessId());
+        creditRequest.setPdfSupport(creditInfoDTO.getPdfSupportName());
+        System.out.println("aqui pdf support: "+creditInfoDTO.getPdfSupport().getName());
+        creditRequest.setWorkSupport(creditInfoDTO.getWorkSupportName());
+        System.out.println("aqui work support: "+creditInfoDTO.getWorkSupport().getName());
 
         creditRequestService.updateCreditRequest(creditId.get(0).getCodRequest(), creditRequest);
         String result = marriedCoupleService.updateProcessVariables(creditRequest.getProcessId(),creditRequest);

@@ -55,7 +55,7 @@ function validateEmail(inputElement) {
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
     // Dominios permitidos
-    const allowedDomains = ["gmail.com", "hotmail.com", "unillanos.edu.co"];
+    const allowedDomains = ["hotmail.com", "gmail.com"];
 
     // Obtén el valor del campo de correo electrónico
     const email = inputElement.value.trim();
@@ -71,14 +71,12 @@ function validateEmail(inputElement) {
         return;
     }
 
-    // Verifica si el correo electrónico contiene uno de los dominios permitidos
-    const domain = email.split("@")[1];
-    if (allowedDomains.includes(domain)) {
+    // Verifica si el correo electrónico tiene un dominio permitido
+    const domain = email.split("@")[1]; // Obtiene el dominio del correo electrónico
+    if (domain.endsWith(".edu.co") || allowedDomains.includes(domain)) {
+        // Si pasa todas las validaciones, se marca como válido
         inputElement.classList.remove("is-invalid");
         inputElement.classList.add("is-valid");
-
-        // Restablece el atributo 'required' si se cumple la validación
-        inputElement.setAttribute("required", "required");
     } else {
         inputElement.classList.remove("is-valid");
         inputElement.classList.add("is-invalid");
@@ -87,6 +85,7 @@ function validateEmail(inputElement) {
         inputElement.removeAttribute("required");
     }
 }
+
 
 
 function validateGender(selectElement) {
