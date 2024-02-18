@@ -170,4 +170,8 @@ public class CreditRequestController {
         return creditRequestService.getCreditRequestByProcessId(processId);
     }
 
+    @GetMapping("/latest-credit-request")
+    public CreditRequest getLatestCreditRequest() {
+        return creditRequestService.findFirstByOrderByRequestDateDesc();
+    }
 }

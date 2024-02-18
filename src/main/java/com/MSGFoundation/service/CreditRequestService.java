@@ -45,4 +45,7 @@ public class CreditRequestService {
         return creditRequestRepository.findByProcessId(processId);
     }
 
+    public CreditRequest findFirstByOrderByRequestDateDesc() {
+        return creditRequestRepository.findFirstByOrderByRequestDateDesc();
+    }
 }
