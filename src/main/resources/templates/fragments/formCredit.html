@@ -25,12 +25,6 @@
             </div>
             <div class="form-floating mb-3 p-1">
 
-<!--                <select class="form-select" id="gender2" name="people[1].gender" required onblur="validateGender(this)">-->
-<!--                <option value="" th:selected="${people[1].getGender() == null or people[1].getGender() == ''}" disabled>Select your gender</option>-->
-<!--                <option value="Male" th:selected="${people[1].getGender() == 'Male'}">Male</option>-->
-<!--                <option value="Woman" th:selected="${people[1].getGender() == 'Woman'}">Woman</option>-->
-<!--            </select>-->
-
                 <select class="form-select" id="gender1" name="people[0].gender" required onblur="validateGender(this)">
                     <option value="" th:selected="${people[0].getGender() == null or people[0].getGender() == 'Woman'}" disabled>Select your gender</option>
                     <option value="Male" th:selected="${people[0].getGender() == null or people[0].getGender() == 'Male'}">Male</option>
