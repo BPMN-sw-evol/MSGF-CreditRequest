@@ -258,8 +258,7 @@ public class MarriedCoupleService {
                 setAssignee(taskInfo1.getTaskId(), "CreditAnalyst");
                 updateReviewAndStatus(processId,"Revisar detalles de solicitud");
                 CreditRequest creditRequest = creditRequestService.getCreditRequestByProcessId(processId);
-                String taskName = getTaskNameByProcessId(creditRequest.getProcessId());
-                creditRequest.setStatus(taskName);
+                creditRequest.setStatus(taskInfo1.getTaskName());
                 LocalDateTime currentDate = LocalDateTime.now();
                 creditRequest.setRequestDate(currentDate);
                 creditRequestService.updateCreditRequest(creditRequest.getCodRequest(), creditRequest);
@@ -309,9 +308,6 @@ public class MarriedCoupleService {
             ResponseEntity<String> responseEntity = restTemplate.exchange(camundaApiUrl, HttpMethod.POST, requestEntity, String.class);
             System.out.println("Evento de mensaje realizado. BusinessID: "+processId);
             updateReviewAndStatus(processId,"Revisar detalles de solicitud");
-            //completeTask(processId);
-            //String responseBody = responseEntity.getBody();
-            //System.out.println("Respuesta de la API de Camunda: " + responseBody);
         } catch (HttpClientErrorException e) {
             String errorMessage = e.getResponseBodyAsString();
             System.err.println("Error en la solicitud a Camunda: " + errorMessage);
