@@ -12,7 +12,7 @@ This repository integrates a Spring Boot application with a PostgreSQL database 
 
 ## Description
 
-[Spring initializr](https://start.spring.io/) is a tool that facilitates the creation of Spring Boot projects that integrate several dependencies as Spring Data JPA, Spring Web, Lombok, Thymeleaf, DevTools. Spring Boot is a development framework that simplifies the creation of Web applications in Java. 
+[Spring initializr](https://start.spring.io/) is a tool that facilitates the creation of Spring Boot projects that integrate several dependencies as Spring Data JPA, Spring Web, Lombok, Thymeleaf, DevTools. Spring Boot is a development framework that simplifies the creation of Web applications in Java.
 
 This module is used exclusively by the couple requesting a credit from MsgFoundation, the user is required to be authenticated in the [authentication with keycloak](https://github.com/BPMN-sw-evol/MSGF-IdentityService) service, where the authenticated person enters the personal data of both the couple and him/hers the characteristics of the loan requested.
 
@@ -22,7 +22,6 @@ This module is used exclusively by the couple requesting a credit from MsgFounda
 To use this program you need the following:
 
 1. **Version control system**: Install GIT from the [GIT official website](https://git-scm.com/downloads).
-
 
 2. **IntelliJ IDEA**: To run and/or modify the project, you can download it from the [IntelliJ official website](https://www.jetbrains.com/es-es/idea/download/?section=windows).
 
@@ -42,9 +41,15 @@ To use the program you must do:
    git clone https://github.com/BPMN-sw-evol/MSGF-CreditRequest.git
    ```
 
-2. Open the **MSGF-CreditRequest** folder and find the **Application** file containing the main method and run it with the start option (upper green triangle).
+2. Create a .env file with the database connection info (Remember that you must have the "credit_request" database created on your PostgreSQL server) in your project root folder:
+   ```
+   DB_URL=jdbc:postgresql://localhost:5432/credit_request
+   DB_USERNAME=postgres
+   DB_PASSWORD=admin
+   ```
+3. Open the **MSGF-CreditRequest** folder and find the **Application** file containing the main method and run it with the start option (upper green triangle).
 
-3. The program works on port 8080. To access open the browser of your choice and type in the search box: 
+3. The program works on port 9001. To access open the browser of your choice and type in the search box:
    ```
    http://localhost:9001/
    ```
