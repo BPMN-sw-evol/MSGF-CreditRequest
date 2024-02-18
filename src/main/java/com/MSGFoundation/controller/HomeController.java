@@ -49,7 +49,8 @@ public class HomeController {
     @GetMapping("/view-credit")
     public String registerCreditView(@RequestParam(name = "coupleId", required = false) Long coupleId, Model model){
         if(coupleId==null) {
-            coupleId = 3L;
+            CreditRequest creditRequest = creditRequestController.getLatestCreditRequest();
+            coupleId = creditRequest.getApplicantCouple().getId();
         }
         Couple couple = coupleController.getCoupleById(coupleId);
         List<CreditRequest> creditInfo = creditRequestController.findCreditRequestByCouple(coupleId).getBody();
