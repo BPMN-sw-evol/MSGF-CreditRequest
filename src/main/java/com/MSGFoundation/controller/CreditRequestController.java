@@ -6,8 +6,11 @@ import com.MSGFoundation.model.CreditRequest;
 import com.MSGFoundation.model.Person;
 import com.MSGFoundation.service.CreditRequestService;
 import com.MSGFoundation.service.MarriedCoupleService;
+import com.MSGFoundation.service.S3Service;
 import com.MSGFoundation.util.RequestStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,7 +19,9 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.persistence.EntityNotFoundException;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,18 +29,14 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("credit_request")
+@RequiredArgsConstructor
 public class CreditRequestController {
     private final CreditRequestService creditRequestService;
     private final CoupleController coupleController;
     private final PersonController personController;
     private final MarriedCoupleService marriedCoupleService;
+    private final S3Service s3Service;
 
-    @Autowired
-    public CreditRequestController(CreditRequestService creditRequestService, CoupleController coupleController, PersonController personController, MarriedCoupleService marriedCoupleService){        this.creditRequestService = creditRequestService;
-        this.coupleController = coupleController;
-        this.personController = personController;
-        this.marriedCoupleService = marriedCoupleService;
-    }
 
     @GetMapping("/")
     public List<CreditRequest> getAllCreditRequest(){
@@ -56,7 +57,7 @@ public class CreditRequestController {
     public RedirectView createCreditRequest(@ModelAttribute CreditInfoDTO creditInfoDTO,
                                             @RequestParam("pdfSupport") MultipartFile pdfSupport,
                                             @RequestParam("workSupport") MultipartFile workSupport,
-                                            RedirectAttributes redirectAttributes) {
+                                            RedirectAttributes redirectAttributes) throws IOException {
         List<Person> people = creditInfoDTO.getPeople();
         Person partner1 = people.get(0);
         Person partner2 = people.get(1);
@@ -92,8 +93,7 @@ public class CreditRequestController {
         creditInfoDTO.setWorkSupportName(workSupportName);
         creditRequest.setPayment(false);
 
-
-        redirectAttributes.addAttribute("coupleId",coupleId);
+        redirectAttributes.addAttribute("coupleId", coupleId);
 
         creditRequestService.createCreditRequest(creditRequest);
         List<CreditRequest> updateCredit = creditRequestService.findCreditByCouple(couple);
@@ -107,29 +107,53 @@ public class CreditRequestController {
             }
         }
 
-        String destinationFolder = Paths.get(System.getProperty("user.dir"), "supporting-docs").toString();
+        //String destinationFolder = "/Users/" + System.getProperty("user.name") + "/supporting-docs";
 
-        try {
-            File folder = new File(destinationFolder);
-            if (!folder.exists()) {
-                if (folder.mkdirs()) {
-                    System.out.println("Folder has been created successfully");
-                } else {
-                    System.err.println("Error creating folder");
-                }
-            }
+//        try {
+//            File folder = new File(destinationFolder);
+//            if (!folder.exists()) {
+//                if (folder.mkdirs()) {
+//                    System.out.println("Folder has been created successfully: " + folder.getAbsolutePath());
+//                } else {
+//                    System.err.println("Error creating folder: " + folder.getAbsolutePath());
+//                }
+//            }
+//
+//            // Transferir el archivo workSupport
+//            String workFileName = workSupport.getOriginalFilename();
+//            String workSupportFilePath = Paths.get(destinationFolder, workFileName).toString();
+//
+//            try (OutputStream os = new FileOutputStream(workSupportFilePath)) {
+//                os.write(workSupport.getBytes());
+//                System.out.println("Work Support file transferred successfully to: " + workSupportFilePath);
+//            } catch (IOException e) {
+//                System.err.println("Error transferring Work Support file: " + e.getMessage());
+//                e.printStackTrace();
+//            }
+//
+//            // Transferir el archivo pdfSupport
+//            String pdfFileName = pdfSupport.getOriginalFilename();
+//            String pdfFilePath = Paths.get(destinationFolder, pdfFileName).toString();
+//
+//            try (OutputStream os = new FileOutputStream(pdfFilePath)) {
+//                os.write(pdfSupport.getBytes());
+//                System.out.println("PDF file transferred successfully to: " + pdfFilePath);
+//            } catch (IOException e) {
+//                System.err.println("Error transferring PDF file: " + e.getMessage());
+//                e.printStackTrace();
+//            }
 
-            String pdfFilePath = Paths.get(destinationFolder, pdfSupportName).toString();
-            pdfSupport.transferTo(new File(pdfFilePath));
+            // Subir archivos a S3 si es necesario
+            s3Service.uploadFile(pdfSupport,pdfSupportName);
+            s3Service.uploadFile(workSupport, workSupportName);
 
-            String workSupportFilePath = Paths.get(destinationFolder, workSupportName).toString();
-            workSupport.transferTo(new File(workSupportFilePath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         return new RedirectView("/view-credit");
     }
+
 
     @PostMapping("/update")
     public RedirectView updateCreditRequest(@ModelAttribute("creditInfoDTO") CreditInfoDTO creditInfoDTO){
@@ -156,9 +180,13 @@ public class CreditRequestController {
         creditRequest.setTermInYears(20L);
         creditRequest.setCountReviewCR(marriedCoupleService.getCountReview(creditId.get(0).getProcessId()));
         creditRequest.setProcessId(creditId.get(0).getProcessId());
-        creditRequest.setPdfSupport(creditInfoDTO.getPdfSupportName());
+
+        String pdfSupportName = String.format("%s-%s-pdf-support.pdf", people.get(0).getId(), people.get(1).getId());
+        String workSupportName = String.format("%s-%s-work-support.pdf", people.get(0).getId(), people.get(1).getId());
+
+        creditRequest.setPdfSupport(pdfSupportName);
         System.out.println("aqui pdf support: "+creditInfoDTO.getPdfSupport().getName());
-        creditRequest.setWorkSupport(creditInfoDTO.getWorkSupportName());
+        creditRequest.setWorkSupport(workSupportName);
         System.out.println("aqui work support: "+creditInfoDTO.getWorkSupport().getName());
 
         creditRequestService.updateCreditRequest(creditId.get(0).getCodRequest(), creditRequest);
