@@ -3,7 +3,9 @@ package com.MSGFoundation.controller;
 import com.MSGFoundation.dto.CoupleDTO;
 import com.MSGFoundation.dto.CreditInfoDTO;
 import com.MSGFoundation.model.Person;
+import com.MSGFoundation.service.CoupleService;
 import com.MSGFoundation.service.PersonService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -11,16 +13,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/person")
 public class PersonController {
     private final PersonService personService;
-    private final CoupleController coupleController;
-
-    @Autowired
-    public PersonController(PersonService personService, CoupleController coupleController) {
-        this.personService = personService;
-        this.coupleController = coupleController;
-    }
+    private final CoupleService coupleService;
 
     @GetMapping("/")
     public List<Person> getAllPersons() {
@@ -36,14 +33,13 @@ public class PersonController {
     public String createPerson(@RequestBody CreditInfoDTO creditInfoDTO) {
         List<Person> people = creditInfoDTO.getPeople();
 
-        // Si todas las validaciones son exitosas, proceder con la creación de personas y pareja
         personService.createPerson(people.get(0));
         personService.createPerson(people.get(1));
 
         CoupleDTO couple = new CoupleDTO();
         couple.setPartner1Id(people.get(0).getId());
         couple.setPartner2Id(people.get(1).getId());
-        coupleController.createCouple(couple);
+        coupleService.createCouple(couple);
 
         return "People has been created successfully";
     }
@@ -58,3 +54,5 @@ public class PersonController {
         personService.deletePerson(id);
     }
 }
+
+

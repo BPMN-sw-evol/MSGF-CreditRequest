@@ -1,7 +1,10 @@
 package com.MSGFoundation.service;
 
+import com.MSGFoundation.dto.CoupleDTO;
 import com.MSGFoundation.model.Couple;
+import com.MSGFoundation.model.Person;
 import com.MSGFoundation.repository.ICoupleRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,13 +12,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CoupleService {
     private final ICoupleRepository coupleRepository;
-
-    @Autowired
-    public CoupleService(ICoupleRepository coupleRepository) {
-        this.coupleRepository = coupleRepository;
-    }
+    private final PersonService personService;
 
     public List<Couple> getAllCouples() {
         return coupleRepository.findAll();
@@ -26,7 +26,17 @@ public class CoupleService {
         return optionalCouple.orElse(null);
     }
 
-    public Couple createCouple(Couple couple) {
+    public Couple createCouple(CoupleDTO coupleDTO) {
+        String partner1Id = coupleDTO.getPartner1Id();
+        String partner2Id = coupleDTO.getPartner2Id();
+
+        Person partner1 = personService.getPersonById(partner1Id);
+        Person partner2 = personService.getPersonById(partner2Id);
+
+        Couple couple = new Couple();
+        couple.setPartner1(partner1);
+        couple.setPartner2(partner2);
+
         return coupleRepository.save(couple);
     }
 

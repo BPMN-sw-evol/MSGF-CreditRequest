@@ -34,7 +34,7 @@ public class S3Service {
     public String downloadFile(String fileName) throws IOException {
         String localPath = "/Users/"+System.getProperty("user.name")+"/";
         if (!doesObjectExists(fileName)) {
-            return "El archivo introducido no existe";
+            return "File has not exists";
         }
         GetObjectRequest request = GetObjectRequest.builder()
                 .bucket("bucket-msgfoundation")
@@ -52,7 +52,7 @@ public class S3Service {
         } catch (IOException e) {
             throw new IOException(e.getMessage());
         }
-        return "Archivo descargado correctamente";
+        return "File has been downloaded successfully";
     }
 
     public boolean doesObjectExists(String objectKey) {
@@ -87,6 +87,22 @@ public class S3Service {
         }
     }
 
+    public String updateFile(MultipartFile file, String filename) throws IOException {
+        if (!doesObjectExists(filename)) {
+            return "File has not exists¿";
+        }
 
+        try {
+            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                    .bucket("bucket-msgfoundation")
+                    .key(filename)
+                    .build();
+
+            s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
+            return "File has been updated successfully";
+        } catch (IOException e) {
+            throw new IOException("Error while updating: " + e.getMessage());
+        }
+    }
 
 }

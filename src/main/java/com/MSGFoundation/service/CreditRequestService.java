@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CreditRequestService {
@@ -21,16 +20,15 @@ public class CreditRequestService {
         return creditRequestRepository.findAll();
     }
 
-    public CreditRequest createCreditRequest(CreditRequest creditRequest){
-        return creditRequestRepository.save(creditRequest);
+    public void createCreditRequest(CreditRequest creditRequest){
+        creditRequestRepository.save(creditRequest);
     }
 
-    public CreditRequest updateCreditRequest(Long id, CreditRequest creditRequest){
+    public void updateCreditRequest(Long id, CreditRequest creditRequest){
         if(creditRequestRepository.existsById(id)){
             creditRequest.setCodRequest(id);
-            return creditRequestRepository.save(creditRequest);
+            creditRequestRepository.save(creditRequest);
         }
-        return null;
     }
 
     public void deleteCreditRequest(Long id){

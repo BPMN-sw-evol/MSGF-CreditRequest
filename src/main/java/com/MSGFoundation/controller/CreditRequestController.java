@@ -1,12 +1,11 @@
 package com.MSGFoundation.controller;
 
+import com.MSGFoundation.dto.CoupleDTO;
 import com.MSGFoundation.dto.CreditInfoDTO;
 import com.MSGFoundation.model.Couple;
 import com.MSGFoundation.model.CreditRequest;
 import com.MSGFoundation.model.Person;
-import com.MSGFoundation.service.CreditRequestService;
-import com.MSGFoundation.service.MarriedCoupleService;
-import com.MSGFoundation.service.S3Service;
+import com.MSGFoundation.service.*;
 import com.MSGFoundation.util.RequestStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +27,14 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("credit_request")
 @RequiredArgsConstructor
+@RequestMapping("credit_request")
 public class CreditRequestController {
     private final CreditRequestService creditRequestService;
-    private final CoupleController coupleController;
-    private final PersonController personController;
+    private final CoupleService coupleService;
+    private final PersonService personService;
     private final MarriedCoupleService marriedCoupleService;
     private final S3Service s3Service;
-
 
     @GetMapping("/")
     public List<CreditRequest> getAllCreditRequest(){
@@ -46,7 +44,7 @@ public class CreditRequestController {
     @GetMapping("/{coupleId}")
     public ResponseEntity<List<CreditRequest>> findCreditRequestByCouple(@PathVariable Long coupleId){
         try{
-            Couple couple = coupleController.getCoupleById(coupleId);
+            Couple couple = coupleService.getCoupleById(coupleId);
             List<CreditRequest> creditRequest = creditRequestService.findCreditByCouple(couple);
             return ResponseEntity.ok(creditRequest);
         }catch (EntityNotFoundException e){
@@ -62,7 +60,13 @@ public class CreditRequestController {
         Person partner1 = people.get(0);
         Person partner2 = people.get(1);
 
-        personController.createPerson(creditInfoDTO);
+        personService.createPerson(partner1);
+        personService.createPerson(partner2);
+        CoupleDTO coupleDTO = new CoupleDTO();
+        coupleDTO.setPartner1Id(partner1.getId());
+        coupleDTO.setPartner2Id(partner2.getId());
+        coupleService.createCouple(coupleDTO);
+
 
         CreditRequest creditRequest = new CreditRequest();
         creditRequest.setMarriageYears(creditInfoDTO.getMarriageYears());
@@ -73,8 +77,8 @@ public class CreditRequestController {
         creditRequest.setStatus(RequestStatus.DRAFT.toString());
         LocalDateTime currentDate = LocalDateTime.now();
         creditRequest.setRequestDate(currentDate);
-        Long coupleId = coupleController.getCouplebyIds(partner1.getId(), partner2.getId()).getBody();
-        Couple couple = coupleController.getCoupleById(coupleId);
+        Long coupleId = coupleService.getCouplebyIds(partner1.getId(), partner2.getId());
+        Couple couple = coupleService.getCoupleById(coupleId);
         creditRequest.setApplicantCouple(couple);
         creditRequest.setCountReviewCR(0L);
         creditRequest.setTermInYears(20L);
@@ -107,49 +111,8 @@ public class CreditRequestController {
             }
         }
 
-        //String destinationFolder = "/Users/" + System.getProperty("user.name") + "/supporting-docs";
-
-//        try {
-//            File folder = new File(destinationFolder);
-//            if (!folder.exists()) {
-//                if (folder.mkdirs()) {
-//                    System.out.println("Folder has been created successfully: " + folder.getAbsolutePath());
-//                } else {
-//                    System.err.println("Error creating folder: " + folder.getAbsolutePath());
-//                }
-//            }
-//
-//            // Transferir el archivo workSupport
-//            String workFileName = workSupport.getOriginalFilename();
-//            String workSupportFilePath = Paths.get(destinationFolder, workFileName).toString();
-//
-//            try (OutputStream os = new FileOutputStream(workSupportFilePath)) {
-//                os.write(workSupport.getBytes());
-//                System.out.println("Work Support file transferred successfully to: " + workSupportFilePath);
-//            } catch (IOException e) {
-//                System.err.println("Error transferring Work Support file: " + e.getMessage());
-//                e.printStackTrace();
-//            }
-//
-//            // Transferir el archivo pdfSupport
-//            String pdfFileName = pdfSupport.getOriginalFilename();
-//            String pdfFilePath = Paths.get(destinationFolder, pdfFileName).toString();
-//
-//            try (OutputStream os = new FileOutputStream(pdfFilePath)) {
-//                os.write(pdfSupport.getBytes());
-//                System.out.println("PDF file transferred successfully to: " + pdfFilePath);
-//            } catch (IOException e) {
-//                System.err.println("Error transferring PDF file: " + e.getMessage());
-//                e.printStackTrace();
-//            }
-
-            // Subir archivos a S3 si es necesario
-            s3Service.uploadFile(pdfSupport,pdfSupportName);
-            s3Service.uploadFile(workSupport, workSupportName);
-
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        s3Service.uploadFile(pdfSupport,pdfSupportName);
+        s3Service.uploadFile(workSupport, workSupportName);
 
         return new RedirectView("/view-credit");
     }
@@ -159,11 +122,11 @@ public class CreditRequestController {
     public RedirectView updateCreditRequest(@ModelAttribute("creditInfoDTO") CreditInfoDTO creditInfoDTO){
 
         List<Person> people = creditInfoDTO.getPeople();
-        personController.updatePerson(people.get(0).getId(),people.get(0));
-        personController.updatePerson(people.get(1).getId(),people.get(1));
+        personService.updatePerson(people.get(0).getId(),people.get(0));
+        personService.updatePerson(people.get(1).getId(),people.get(1));
 
-        Long coupleId = coupleController.getCouplebyIds(people.get(0).getId(), people.get(1).getId()).getBody();
-        Couple couple = coupleController.getCoupleById(coupleId);
+        Long coupleId = coupleService.getCouplebyIds(people.get(0).getId(), people.get(1).getId());
+        Couple couple = coupleService.getCoupleById(coupleId);
         List<CreditRequest> creditId = creditRequestService.findCreditByCouple(couple);
 
         CreditRequest creditRequest = new CreditRequest();

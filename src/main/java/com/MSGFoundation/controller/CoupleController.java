@@ -5,6 +5,7 @@ import com.MSGFoundation.dto.CoupleDTO;
 import com.MSGFoundation.model.Person;
 import com.MSGFoundation.service.CoupleService;
 import com.MSGFoundation.service.PersonService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,16 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/couple")
 public class CoupleController {
     private final CoupleService coupleService;
-    private final PersonService personService;
-
-    @Autowired
-    public CoupleController(CoupleService coupleService, PersonService personService) {
-        this.coupleService = coupleService;
-        this.personService = personService;
-    }
 
     @GetMapping("/")
     public List<Couple> getAllCouples() {
@@ -35,22 +30,7 @@ public class CoupleController {
 
     @PostMapping("/create")
     public Couple createCouple(@RequestBody CoupleDTO coupleDTO) {
-        String partner1Id = coupleDTO.getPartner1Id();
-        String partner2Id = coupleDTO.getPartner2Id();
-
-        Person partner1 = personService.getPersonById(partner1Id);
-        Person partner2 = personService.getPersonById(partner2Id);
-
-        if (partner1 != null && partner2 != null) {
-            Couple couple = new Couple();
-            couple.setPartner1(partner1);
-            couple.setPartner2(partner2);
-
-            return coupleService.createCouple(couple);
-        } else {
-            // Manejar el escenario en el que una o ambas personas no existen
-            return null;
-        }
+        return coupleService.createCouple(coupleDTO);
     }
 
     @PutMapping("/update/{id}")
