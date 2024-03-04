@@ -5,11 +5,9 @@ import com.MSGFoundation.dto.CreditInfoDTO;
 import com.MSGFoundation.model.Couple;
 import com.MSGFoundation.model.CreditRequest;
 import com.MSGFoundation.model.Person;
-import com.MSGFoundation.service.*;
+import com.MSGFoundation.service.impl.*;
 import com.MSGFoundation.util.RequestStatus;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,24 +15,19 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.persistence.EntityNotFoundException;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("credit_request")
 public class CreditRequestController {
-    private final CreditRequestService creditRequestService;
-    private final CoupleService coupleService;
-    private final PersonService personService;
-    private final MarriedCoupleService marriedCoupleService;
-    private final S3Service s3Service;
+    private final CreditRequestServiceImpl creditRequestService;
+    private final CoupleServiceImpl coupleService;
+    private final PersonServiceImpl personService;
+    private final MarriedCoupleServiceImpl marriedCoupleService;
+    private final S3ServiceImpl s3Service;
 
     @GetMapping("/")
     public List<CreditRequest> getAllCreditRequest(){

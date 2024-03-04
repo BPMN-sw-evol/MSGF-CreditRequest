@@ -3,11 +3,10 @@ package com.MSGFoundation.controller;
 import com.MSGFoundation.model.Couple;
 import com.MSGFoundation.model.CreditRequest;
 import com.MSGFoundation.model.Person;
-import com.MSGFoundation.service.CoupleService;
-import com.MSGFoundation.service.CreditRequestService;
-import com.MSGFoundation.service.PersonService;
+import com.MSGFoundation.service.impl.CoupleServiceImpl;
+import com.MSGFoundation.service.impl.CreditRequestServiceImpl;
+import com.MSGFoundation.service.impl.PersonServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +18,9 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class HomeController {
-    private final CreditRequestService creditRequestService;
-    private final CoupleService coupleService;
-    private final PersonService personService;
+    private final CreditRequestServiceImpl creditRequestService;
+    private final CoupleServiceImpl coupleService;
+    private final PersonServiceImpl personService;
 
     @GetMapping({"/home",""})
     public String mainView(Model model) {

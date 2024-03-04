@@ -1,15 +1,15 @@
 package com.MSGFoundation.controller;
 
 import com.MSGFoundation.dto.CreditInfoDTO;
-import com.MSGFoundation.service.MarriedCoupleService;
+import com.MSGFoundation.service.impl.MarriedCoupleServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class ProcessController {
-    private final MarriedCoupleService marriedCoupleService;
+    private final MarriedCoupleServiceImpl marriedCoupleService;
 
-    public ProcessController(MarriedCoupleService marriedCoupleService) {
+    public ProcessController(MarriedCoupleServiceImpl marriedCoupleService) {
         this.marriedCoupleService = marriedCoupleService;
     }
 

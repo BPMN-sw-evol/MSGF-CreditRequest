@@ -3,10 +3,9 @@ package com.MSGFoundation.controller;
 import com.MSGFoundation.dto.CoupleDTO;
 import com.MSGFoundation.dto.CreditInfoDTO;
 import com.MSGFoundation.model.Person;
-import com.MSGFoundation.service.CoupleService;
-import com.MSGFoundation.service.PersonService;
+import com.MSGFoundation.service.impl.CoupleServiceImpl;
+import com.MSGFoundation.service.impl.PersonServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +15,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/person")
 public class PersonController {
-    private final PersonService personService;
-    private final CoupleService coupleService;
+    private final PersonServiceImpl personService;
+    private final CoupleServiceImpl coupleService;
 
     @GetMapping("/")
     public List<Person> getAllPersons() {

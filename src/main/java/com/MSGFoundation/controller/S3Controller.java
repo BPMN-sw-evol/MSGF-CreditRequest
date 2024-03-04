@@ -1,6 +1,6 @@
 package com.MSGFoundation.controller;
 
-import com.MSGFoundation.service.S3Service;
+import com.MSGFoundation.service.impl.S3ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,7 +11,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @RequestMapping("/files")
 public class S3Controller {
-    private final S3Service s3Service;
+    private final S3ServiceImpl s3Service;
 
     @PostMapping("/upload")
     private String uploadFile(@RequestParam("file")MultipartFile file) throws IOException {
